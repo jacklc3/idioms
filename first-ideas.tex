@@ -1,0 +1,254 @@
+\documentclass{article}
+
+\newcommand{\hide}[1]{}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{datetime}
+\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{mathpartir}
+\usepackage{stmaryrd}
+\usepackage{tikz-cd}
+\usepackage{tikz}
+
+\newtheorem{thm}{Theorem}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{conj}[thm]{Conjecture}
+\newtheorem{claim}[thm]{Claim}
+
+\theoremstyle{definition}
+\newtheorem{defn}[thm]{Definition}
+\newtheorem{example}[thm]{Example}
+\newtheorem{question}[thm]{Question}
+
+\theoremstyle{remark}
+\newtheorem{remark}[thm]{Remark}
+
+\newcommand{\MCA}{\ensuremath{\mathcal A}}
+\newcommand{\MCB}{\ensuremath{\mathcal B}}
+\newcommand{\MCC}{\ensuremath{\mathcal C}}
+\newcommand{\MCD}{\ensuremath{\mathcal D}}
+\newcommand{\MCE}{\ensuremath{\mathcal E}}
+\newcommand{\MCF}{\ensuremath{\mathcal F}}
+\newcommand{\MCG}{\ensuremath{\mathcal G}}
+\newcommand{\MCH}{\ensuremath{\mathcal H}}
+\newcommand{\MCI}{\ensuremath{\mathcal I}}
+\newcommand{\MCJ}{\ensuremath{\mathcal J}}
+\newcommand{\MCK}{\ensuremath{\mathcal K}}
+\newcommand{\MCL}{\ensuremath{\mathcal L}}
+\newcommand{\MCM}{\ensuremath{\mathcal M}}
+\newcommand{\MCN}{\ensuremath{\mathcal N}}
+\newcommand{\MCO}{\ensuremath{\mathcal O}}
+\newcommand{\MCP}{\ensuremath{\mathcal P}}
+\newcommand{\MCQ}{\ensuremath{\mathcal Q}}
+\newcommand{\MCR}{\ensuremath{\mathcal R}}
+\newcommand{\MCS}{\ensuremath{\mathcal S}}
+\newcommand{\MCT}{\ensuremath{\mathcal T}}
+\newcommand{\MCU}{\ensuremath{\mathcal U}}
+\newcommand{\MCV}{\ensuremath{\mathcal V}}
+\newcommand{\MCW}{\ensuremath{\mathcal W}}
+\newcommand{\MCX}{\ensuremath{\mathcal X}}
+\newcommand{\MCY}{\ensuremath{\mathcal Y}}
+\newcommand{\MCZ}{\ensuremath{\mathcal Z}}
+
+\newcommand{\BA}{\ensuremath{\mathbb A}}
+\newcommand{\BB}{\ensuremath{\mathbb B}}
+\newcommand{\BC}{\ensuremath{\mathbb C}}
+\newcommand{\BD}{\ensuremath{\mathbb D}}
+\newcommand{\BE}{\ensuremath{\mathbb E}}
+\newcommand{\BF}{\ensuremath{\mathbb F}}
+\newcommand{\BG}{\ensuremath{\mathbb G}}
+\newcommand{\BH}{\ensuremath{\mathbb H}}
+\newcommand{\BI}{\ensuremath{\mathbb I}}
+\newcommand{\BJ}{\ensuremath{\mathbb J}}
+\newcommand{\BK}{\ensuremath{\mathbb K}}
+\newcommand{\BL}{\ensuremath{\mathbb L}}
+\newcommand{\BM}{\ensuremath{\mathbb M}}
+\newcommand{\BN}{\ensuremath{\mathbb N}}
+\newcommand{\BO}{\ensuremath{\mathbb O}}
+\newcommand{\BP}{\ensuremath{\mathbb P}}
+\newcommand{\BQ}{\ensuremath{\mathbb Q}}
+\newcommand{\BR}{\ensuremath{\mathbb R}}
+\newcommand{\BS}{\ensuremath{\mathbb S}}
+\newcommand{\BT}{\ensuremath{\mathbb T}}
+\newcommand{\BU}{\ensuremath{\mathbb U}}
+\newcommand{\BV}{\ensuremath{\mathbb V}}
+\newcommand{\BW}{\ensuremath{\mathbb W}}
+\newcommand{\BX}{\ensuremath{\mathbb X}}
+\newcommand{\BY}{\ensuremath{\mathbb Y}}
+\newcommand{\BZ}{\ensuremath{\mathbb Z}}
+
+\ddmmyyyydate
+\renewcommand{\dateseparator}{-}
+
+\makeatletter
+\def\@maketitle{%
+  \newpage
+  \null
+  \vskip 2em%
+  \begin{center}%
+  \let \footnote \thanks
+    {\large \textbf \@title \par}%
+    \vskip 1.5em%
+    {
+      \lineskip .5em%
+      \begin{tabular}[t]{c}%
+        \@author
+      \end{tabular}\par}%
+    \vskip 1em%
+    {Draft of \@date}%
+  \end{center}%
+  \par
+  \vskip 1.5em}
+\makeatother
+
+\newcommand{\todo}[1]{[Todo: #1]}
+
+\DeclareMathOperator*{\colim}{colim}
+
+\newcommand{\op}{^{\mathrm{op}}}
+\newcommand{\Kl}{\mathrm{Kl}}
+\newcommand{\Surj}{\mathrm{Surj}}
+\newcommand{\Set}{\mathbf{Set}}
+\newcommand{\FinSet}{\mathbf{FinSet}}
+\newcommand{\MainCategory}{\widetilde{\Kl}(T)}
+\newcommand{\CCat}{\mathcal{C}}
+\newcommand{\DCat}{\mathcal{D}}
+\newcommand{\GCat}{\mathcal{G}}
+\newcommand{\El}{\mathrm{El}}
+
+\newcommand{\preT}{[\MCT\op, \Set]}
+\newcommand{\bangle}[1]{\langle #1 \rangle}
+\newcommand\sem[1]{\llbracket #1 \rrbracket}
+\newcommand\opsem[1]{\llparenthesis #1 \rrparenthesis}
+\newcommand{\bind}{\mathrel{\scalebox{0.5}[1]{$>\!>=$}}}
+\newcommand{\CP}{\overline{P}}
+
+\newcommand{\mult}{\mathbin{\star}}
+\newcommand{\unit}{\eta}
+
+
+\newcommand{\image}{\mathsf{image}}
+\newcommand\with{\oplus}
+
+\title{Notes on idioms}
+\author{Jack Liell-Cock, Theo Wang}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\newcommand{\ACat}{\MCA}
+
+Consider a cartesian closed category $\ACat$.
+\begin{defn}
+  An \emph{idiom} $(W, \star, \eta)$ on $\ACat$ consists of:
+  \begin{itemize}
+    \item An endofunctor $W: \ACat \to \ACat$,
+    \item A family of maps $\unit_A: A \to WA$ natural in $A \in \ACat$,
+    \item A family of maps $\mult_{A,B}: WA \times WB \to W(A\times B)$ natural in $A,B \in \ACat$,
+  \end{itemize}
+  all such that $(W, \eta_1, \star)$ is a lax monoidal functor, and the following diagram commutes.
+  \[
+  \begin{tikzcd}[column sep=large]
+    {A\times B} & {WA\times WB} \\
+    & {W(A\times B)}
+    \arrow["{\eta_A \times \eta_B}", from=1-1, to=1-2]
+    \arrow["{\eta_{A\times B}}"', from=1-1, to=2-2]
+    \arrow["{\star_{A,B}}", from=1-2, to=2-2]
+  \end{tikzcd}
+  \]
+  \todo{Check if we need more equations}
+\end{defn}
+\begin{prop}
+  The following data are equivalent:
+  \begin{enumerate}
+    \item An idiom $(W, \mult, \eta)$.
+    \item A lax monoidal functor $(W, \varepsilon, \phi)$ with strength maps $\sigma_{A,B}: WA \times B \to W(A\times B)$ such that the following diagram commutes:
+      \[
+      \begin{tikzcd}[column sep=large]
+        {WA\times WB \times C} & {W(A\times B) \times C} \\
+        {WA \times W(B\times C)} & {W(A\times B\times C)}
+        \arrow["{\phi_{A,B} \times C}", from=1-1, to=1-2]
+        \arrow["{WA\times \sigma_{B,C}}"', from=1-1, to=2-1]
+        \arrow["{\sigma_{A\times B,C}}", from=1-2, to=2-2]
+        \arrow["{\phi_{A,B\times C}}"', from=2-1, to=2-2]
+      \end{tikzcd}
+      \]
+  \end{enumerate}
+\end{prop}
+
+\begin{proof}
+  In the forwards direction, we define
+  \begin{mathpar}
+    \phi_{A,B} = \mult_{A,B} \and \varepsilon = \eta_1 \and \sigma_{A,B} = \mult_{A,B} \circ (WA \times \eta_B)
+  \end{mathpar}
+  In the reverse direction, we define $\mult_{A,B} = \phi_{A,B}$, and the unit as
+  \[
+    A \xrightarrow{\lambda_A^{-1}} 1 \times A \xrightarrow{\varepsilon \times A} W1 \times A \xrightarrow{\sigma_{1,A}} W(1\times A) \xrightarrow{W\lambda_A} WA
+  \]
+  \todo{Show this carries through for the equations.}
+\end{proof}
+
+\section{The Idiom Category}
+
+\newcommand{\Idm}[1]{\mathsf{Idm}(#1)}
+
+The goal of this section is to define a Kleisli-like category for idioms.
+In the sense that Kleisli categories of monads capture programs with monadic effects, we would like the Kleisli-like category to capture programs with idiomatic effects.
+
+\begin{defn}
+  For a CCC $\ACat$ considered self-enriched. We define the category $\Idm W$ as the image of the category $\ACat$ under the change of base along $W$. That is,
+  the objects of $\Idm W$ are the same as the objects of $\ACat$, and the morphisms are
+  \[
+    \Idm W [A, B] = W[A,B].
+  \]
+\end{defn}
+
+Seems to be a nice category to do idiomatic computations in, because morphisms are effectful, but cant be sequenced based on their return value.
+
+\subsection{The Idiom Calculus}
+
+\newcommand{\aj}[3]{#1 \vdash_{\mathsf{v}} #2:#3}
+\newcommand{\cj}[3]{#1 \vdash_{\mathsf{c}} #2:#3}
+\newcommand{\lunit}{{*}}
+\newcommand{\app}[2]{{#1 \ #2}}
+\newcommand{\lift}[1]{\mathsf{lift}(#1)}
+
+We begin with value judgements (judgements in $\ACat$) which follow the simply-typed lambda calculus:
+\begin{mathpar}
+  \inferrule{ }{\aj {\Gamma,a:A,\Gamma'} a {A}}
+  \and
+  \inferrule{ }{\aj {\Gamma} \lunit {1}}
+  \and
+  \inferrule{\aj \Gamma u {A\times B}}{\aj \Gamma {\pi_1 u} {A}}
+  \and
+  \inferrule{\aj \Gamma u {A\times B}}{\aj \Gamma {\pi_2 u} {B}}
+  \and
+  \inferrule{\aj {\Gamma} u {A} \and \aj {\Gamma} v {B}}{\aj {\Gamma} {(u,v)} {A\times B}}
+  \and
+  \inferrule{\aj {\Gamma,a:A} u B}{\aj \Gamma {\lambda (a:A).u} {A\to B}}
+  \and
+  \inferrule{\aj \Gamma u {A\to B} \and \aj \Gamma v A}{\aj \Gamma {\app u v} B}
+\end{mathpar}
+We may \emph{lift} value judgements to idiomatic judgements which corresponds to applying $W$ to the hom-object.
+\begin{mathpar}
+  \inferrule{\aj \Gamma t A}{\cj \Gamma {\lift t} A}
+\end{mathpar}
+The category $\Idm W$ is symmetric monoidal closed and so we use the linear lambda calculus for computation judgements. We additionally request that
+$\mathsf{lift}$ is a strong symmetric monoidal closed functor. For instance,
+\begin{mathpar}
+  \inferrule{\aj \Gamma u {A\to B} \and \aj \Gamma v A}{\cj \Gamma {{\lift{\app u v}} = \app {\lift u} {\lift v}} B}
+\end{mathpar}
+We may introduce effects via the following judgement.
+\begin{mathpar}
+  \inferrule{ }{\cj \bullet {\sigma} A}(\sigma \in WA)
+\end{mathpar}
+
+\end{document}
