@@ -148,38 +148,38 @@
 
 Consider a cartesian closed category $\CCat$.
 \begin{defn}
-  An \emph{idiom} is a pointed lax monoidal endofunctor on $\CCat$. That is, an idiom $(W, \unit, \varepsilon, \mult)$ consists of:
+  An \emph{idiom} is a pointed lax monoidal endofunctor on $\CCat$. That is, an idiom $(J, \unit, \varepsilon, \mult)$ consists of:
   \begin{itemize}
     \item An endofunctor $W: \CCat \to \CCat$,
     \item A family of maps $\unit_A: A \to WA$ natural in $A \in \CCat$,
     \item A map $\eta: 1 \to W1$,
-    \item A family of maps $\mult_{A,B}: WA \times WB \to W(A\times B)$ natural in $A,B \in \CCat$,
+    \item A family of maps $\mult_{A,B}: WA \times WB \to J(A\times B)$ natural in $A,B \in \CCat$,
   \end{itemize}
   such that the following diagrams commute.
   \begin{mathpar}
     \begin{tikzcd}[column sep=large]
-      {(WA\times WB)\times WC} & {W(A\times B) \times WC} & {W((A\times B)\times C)} \\
-      {WA\times (WB\times WC)} & {WA\times W(B\times C)} & {W(A\times (B\times C))}
+      {(WA\times WB)\times WC} & {J(A\times B) \times WC} & {J((A\times B)\times C)} \\
+      {WA\times (WB\times WC)} & {WA\times J(B\times C)} & {J(A\times (B\times C))}
       \arrow["{\phi_{A,B}\times WC}", from=1-1, to=1-2]
       \arrow["{\alpha_{WA,WB,WC}}"', from=1-1, to=2-1]
       \arrow["{\phi_{A\times B, C}}", from=1-2, to=1-3]
-      \arrow["{W\alpha_{A,B,C}}", from=1-3, to=2-3]
+      \arrow["{J\alpha_{A,B,C}}", from=1-3, to=2-3]
       \arrow["{WA\times \phi_{B,C}}"', from=2-1, to=2-2]
       \arrow["{\phi_{A,B\times C}}"', from=2-2, to=2-3]
     \end{tikzcd}
     \and
     \begin{tikzcd}[column sep=large]
       {1\times WA} & {W1 \times WA} \\
-      WA & {W(1\times A)}
+      WA & {J(1\times A)}
       \arrow["{\varepsilon \times WA}", from=1-1, to=1-2]
       \arrow["{\lambda_{WA}}"', from=1-1, to=2-1]
       \arrow["{\phi_{A,1}}", from=1-2, to=2-2]
-      \arrow["{W\lambda_A}", from=2-2, to=2-1]
+      \arrow["{J\lambda_A}", from=2-2, to=2-1]
     \end{tikzcd}
     \and
     \begin{tikzcd}[column sep=large]
       {A\times B} & {WA\times WB} \\
-      & {W(A\times B)}
+      & {J(A\times B)}
       \arrow["{\eta_A\times \eta_B}", from=1-1, to=1-2]
       \arrow["{\eta_{A\times B}}"', from=1-1, to=2-2]
       \arrow["{\phi_{A,B}}", from=1-2, to=2-2]
@@ -202,7 +202,7 @@ Consider a cartesian closed category $\CCat$.
       \begin{mathpar}
         \begin{tikzcd}[column sep=large]
           {A\times B} & {WA\times WB} \\
-          & {W(A\times B)}
+          & {J(A\times B)}
           \arrow["{\eta_A\times \eta_B}", from=1-1, to=1-2]
           \arrow["{\eta_{A\times B}}"', from=1-1, to=2-2]
           \arrow["{\phi_{A,B}}", from=1-2, to=2-2]
@@ -219,8 +219,8 @@ Consider a cartesian closed category $\CCat$.
       That is, the following diagrams commute.
       \[
       \begin{tikzcd}[column sep=large]
-        {WA\times WB \times C} & {W(A\times B) \times C} \\
-        {WA \times W(B\times C)} & {W(A\times B\times C)}
+        {WA\times WB \times C} & {J(A\times B) \times C} \\
+        {WA \times J(B\times C)} & {J(A\times B\times C)}
         \arrow["{\phi_{A,B} \times C}", from=1-1, to=1-2]
         \arrow["{WA\times \sigma_{B,C}}"', from=1-1, to=2-1]
         \arrow["{\sigma_{A\times B,C}}", from=1-2, to=2-2]
@@ -244,10 +244,10 @@ Consider a cartesian closed category $\CCat$.
 
 \section{Enrichment and Decomposition}
 
-Given an idiom $(W_0, \unit, \mult)$, on a Cartesian closed category $\CCat$, there is a $\CCat$-enriched functor $W : \CCat \to \CCat$ that has same mapping on objects
+Given an idiom $(W_0, \unit, \mult)$, on a Cartesian closed category $\CCat$, there is a $\CCat$-enriched functor $J : \CCat \to \CCat$ that has same mapping on objects
 as $W_0$, and its mapping on hom-objects $W_{A,B}: [A,B] \to [WA, WB]$ is given by the transpose of:
 \[
-  [A,B] \times WA \xrightarrow{\unit_{[A,B]} \times WA} W[A,B] \times WA \xrightarrow{\mult_{[A,B], A}} W([A,B] \times A) \xrightarrow{W\mathsf{ev}_{A,B}} WB
+  [A,B] \times WA \xrightarrow{\unit_{[A,B]} \times WA} J[A,B] \times WA \xrightarrow{\mult_{[A,B], A}} J([A,B] \times A) \xrightarrow{J\mathsf{ev}_{A,B}} WB
 \]
 
 \begin{proof}
@@ -257,10 +257,10 @@ as $W_0$, and its mapping on hom-objects $W_{A,B}: [A,B] \to [WA, WB]$ is given 
 \begin{prop}
   The $\CCat$-enriched functor $W: \CCat \to \CCat$ decomposes in the following way:
   \[
-    \CCat \xrightarrow{L} \Idm W \xrightarrow{R} \CCat
+    \CCat \xrightarrow{L} \Idm J \xrightarrow{R} \CCat
   \]
-  Where $\Idm W$ is the change of base of $\CCat$ along $W$, $L$ is an identity on objects functor that acts on hom-objects via $\unit$, and $R$ sends $A$ to $WA$,
-  and $W[A,B]$ to $[WA, WB]$ via the lax monoidal structure of $W$.
+  Where $\Idm J$ is the change of base of $\CCat$ along $J$, $L$ is an identity on objects functor that acts on hom-objects via $\unit$, and $R$ sends $A$ to $WA$,
+  and $J[A,B]$ to $[WA, WB]$ via the lax monoidal structure of $J$.
   \todo{Make this more explicit.}
 \end{prop}
 
@@ -271,10 +271,10 @@ The goal of this section is to define a Kleisli-like category for idioms.
 In the sense that Kleisli categories of monads capture programs with monadic effects, we would like the Kleisli-like category to capture programs with idiomatic effects.
 
 \begin{defn}
-  For a CCC $\CCat$ considered self-enriched. We define the category $\Idm W$ as the image of the category $\CCat$ under the change of base along $W$. That is,
-  the objects of $\Idm W$ are the same as the objects of $\CCat$, and the morphisms are
+  For a CCC $\CCat$ considered self-enriched. We define the category $\Idm J$ as the image of the category $\CCat$ under the change of base along $J$. That is,
+  the objects of $\Idm J$ are the same as the objects of $\CCat$, and the morphisms are
   \[
-    \Idm W [A, B] = W[A,B].
+    \Idm J [A, B] = J[A,B].
   \]
 \end{defn}
 
@@ -304,11 +304,11 @@ We begin with value judgements (judgements in $\CCat$) which follow the simply-t
   \and
   \inferrule{\aj \Gamma u {A\to B} \and \aj \Gamma v A}{\aj \Gamma {\app u v} B}
 \end{mathpar}
-We may \emph{lift} value judgements to idiomatic judgements which corresponds to applying $W$ to the hom-object.
+We may \emph{lift} value judgements to idiomatic judgements which corresponds to applying $J$ to the hom-object.
 \begin{mathpar}
   \inferrule{\aj \Gamma t A}{\cj \Gamma {\lift t} A}
 \end{mathpar}
-The category $\Idm W$ is symmetric monoidal closed and so we use the linear lambda calculus for computation judgements. We additionally request that
+The category $\Idm J$ is symmetric monoidal closed and so we use the linear lambda calculus for computation judgements. We additionally request that
 $\mathsf{lift}$ is a strong symmetric monoidal closed functor. For instance,
 \begin{mathpar}
   \inferrule{\aj \Gamma u {A\to B} \and \aj \Gamma v A}{\cj \Gamma {{\lift{\app u v}} = \app {\lift u} {\lift v}} B}
