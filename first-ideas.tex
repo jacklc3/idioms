@@ -15,6 +15,44 @@
 \usepackage{tikz-cd}
 \usepackage{tikz}
 
+\usepackage{listings}
+\lstset{
+  backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}; should come as last argument
+%  basicstyle=\footnotesize,        % the size of the fonts that are used for the code
+%  breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
+%  breaklines=true,                 % sets automatic line breaking
+%  captionpos=b,                    % sets the caption-position to bottom
+  commentstyle=\itshape\rmfamily\color{gray},    % comment style
+%  deletekeywords={...},            % if you want to delete keywords from the given language
+%  escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+%  extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+%  firstnumber=1000,                % start line enumeration with line 1000
+%  frame=single,	                   % adds a frame around the code
+  keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+  columns=flexible,
+  keywordstyle= \sffamily,       % keyword style
+  identifierstyle=\rmfamily\itshape,
+  language=haskell,                 % the language of the code
+  basicstyle=\sffamily\upshape,
+%  morekeywords=[2]{knight,bernoulli},            % if you want to add more keywords to the set
+%  keywordstyle=[2]\itshape\bfseries,       % keyword style
+%  morekeywords=[3]{Prob,uniform,bernoulli,normal,beta,exponential},            % if you want to add more keywords to the set
+%  keywordstyle=[3]\color{mygreen},       % keyword style
+%  numbers=left,                    % where to put the line numbers; possible values are (none, left, right)
+%  numbersep=5pt,                   % how far the line numbers are from the code
+%  numberstyle=\tiny\color{mygray}, % the style that is used for the line-numbers
+%  rulecolor=\color{black},         % if not set, the frame colour may be changed on line breaks within not-black text (e.g. comments (green here))
+  showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+  showstringspaces=false,          % underline spaces within strings only
+  showtabs=false,                  % show tabs within strings adding particular underscores
+%  stepnumber=2,                    % the step between two line numbers. If it's 1, each line will be numbered
+  stringstyle=\color{mymauve},     % string literal style
+%  tabsize=2,	                   % sets default tab size to 2 spaces
+%  title=\lstname                   % show the filename of files included with \lstinputlisting; also try caption instead of title
+ literate={->}{$\rightarrow\;$}{2}
+ {<-}{$\leftarrow\;$}{2}
+}
+
 \newtheorem{thm}{Theorem}
 \newtheorem{prop}[thm]{Proposition}
 \newtheorem{cor}[thm]{Corollary}
@@ -114,29 +152,19 @@
 
 \newcommand{\op}{^{\mathrm{op}}}
 \newcommand{\Kl}{\mathrm{Kl}}
-\newcommand{\Surj}{\mathrm{Surj}}
 \newcommand{\Set}{\mathbf{Set}}
 \newcommand{\FinSet}{\mathbf{FinSet}}
-\newcommand{\MainCategory}{\widetilde{\Kl}(T)}
 \newcommand{\CCat}{\mathcal{C}}
 \newcommand{\DCat}{\mathcal{D}}
 \newcommand{\GCat}{\mathcal{G}}
-\newcommand{\El}{\mathrm{El}}
 
-\newcommand{\preT}{[\MCT\op, \Set]}
-\newcommand{\bangle}[1]{\langle #1 \rangle}
-\newcommand\sem[1]{\llbracket #1 \rrbracket}
-\newcommand\opsem[1]{\llparenthesis #1 \rrparenthesis}
 \newcommand{\bind}{\mathrel{\scalebox{0.5}[1]{$>\!>=$}}}
-\newcommand{\CP}{\overline{P}}
+\newcommand{\ob}[1]{{|#1|}}
 
 \newcommand{\mult}{\phi}
 \newcommand{\unit}{\eta}
 
 \newcommand{\Idm}[1]{\mathsf{Idm}(#1)}
-
-\newcommand{\image}{\mathsf{image}}
-\newcommand\with{\oplus}
 
 \title{Notes on idioms}
 \author{Jack Liell-Cock, Theo Wang}
@@ -200,13 +228,14 @@ We should at the very most consider symmetric monoidal closed categories but pro
 
 Idioms can be categorically presented as \emph{strong} lax monoidal functors~\cite{mcbride-applicatives}.
 The following proposition links this presentation to the above definition. It seems like folklore, but I haven't seen it written down anywhere.
+Kock~\cite{kock-strong-functors} proves part of this result (pointed lax monoidal implies strong lax monoidal) but not the reverse direction.
 The benefits of the above definition is that there are way fewer coherence diagrams to check.
 Also, it aligns with the data of applicatives in Haskell way more closely.
 
 \begin{prop}
   Let $\CCat$ be a monidal category. The following data are equivalent:
   \begin{enumerate}
-    \item A lax monoidal endofunctor $(F, \varepsilon, \phi): \CCat \to \CCat$ with coherent pointedness $\eta_A: A \to FA$.
+    \item A lax monoidal endofunctor $(J, \varepsilon, \phi): \CCat \to \CCat$ with monoidal pointedness $\eta_A: A \to JA$.
       In particular, the following diagrams commute.
       \begin{mathpar}
         \begin{tikzcd}[column sep=large]
@@ -224,7 +253,7 @@ Also, it aligns with the data of applicatives in Haskell way more closely.
           \arrow["{\eta_I}", curve={height=-12pt}, from=1-1, to=2-2]
         \end{tikzcd}
       \end{mathpar}
-    \item A lax monoidal endofunctor $(F, \varepsilon, \phi): \CCat \to \CCat$ with coherent bistrength $\sigma^l_{A,B}, \sigma^r_{A,B}: FA \otimes B \to F(A\otimes B)$.
+    \item A lax monoidal endofunctor $(J, \varepsilon, \phi): \CCat \to \CCat$ with monoidal bistrength $\sigma^l_{A,B}, \sigma^r_{A,B}$.
       In particular, the following diagrams commute.
       \begin{mathpar}
         \begin{tikzcd}[column sep=large]
@@ -255,16 +284,16 @@ Also, it aligns with the data of applicatives in Haskell way more closely.
 \begin{proof}
   In the forwards direction, we define
   \begin{align*}
-    \sigma^l_{A,B}: &A \otimes FB \xrightarrow{\eta_A \otimes FB} FA \otimes FB \xrightarrow{\phi_{A,B}} F(A\otimes B), \\
-    \sigma^r_{A,B}: &FA \otimes B \xrightarrow{FA \otimes \eta_B} FA \otimes FB \xrightarrow{\phi_{A,B}} F(A\otimes B).
+    \sigma^l_{A,B}: &A \otimes JB \xrightarrow{\eta_A \otimes JB} JA \otimes JB \xrightarrow{\phi_{A,B}} J(A\otimes B), \\
+    \sigma^r_{A,B}: &JA \otimes B \xrightarrow{JA \otimes \eta_B} JA \otimes JB \xrightarrow{\phi_{A,B}} J(A\otimes B).
   \end{align*}
   In the reverse direction, we define
   \[
-    \eta_A: A \xrightarrow{\lambda_A^{-1}} I \otimes A \xrightarrow{\varepsilon \otimes A} FI \otimes A \xrightarrow{\sigma^r_{I,A}} F(I\otimes A) \xrightarrow{F\lambda_A} FA.
+    \eta_A: A \xrightarrow{\lambda_A^{-1}} I \otimes A \xrightarrow{\varepsilon \otimes A} JI \otimes A \xrightarrow{\sigma^r_{I,A}} J(I\otimes A) \xrightarrow{J\lambda_A} JA.
   \]
   Note that this is equivalent to defining
   \[
-    \eta_A: A \xrightarrow{\rho_A^{-1}} A \otimes I \xrightarrow{A \otimes \varepsilon} A \otimes FI \xrightarrow{\sigma^l_{A,I}} F(A \otimes I) \xrightarrow{F\rho_A} FA.
+    \eta_A: A \xrightarrow{\rho_A^{-1}} A \otimes I \xrightarrow{A \otimes \varepsilon} A \otimes JI \xrightarrow{\sigma^l_{A,I}} J(A \otimes I) \xrightarrow{J\rho_A} JA.
   \]
   The coherences lift through correspondingly.
 \end{proof}
@@ -293,14 +322,16 @@ In the sense that Kleisli categories of monads capture programs with monadic eff
 \begin{defn}
   For a Cartesian closed category $\CCat$ considered self-enriched, and an idiom $(J, \unit, \mult)$.
   We define the category $\Idm J$ as the image of the category $\CCat$ under the change of base along $J$.
-  That is, the objects of $\Idm J$ are the same as the objects of $\CCat$, and the morphisms are
-  \[
+  That is,
+  \begin{mathpar}
+    \ob {\Idm J} = \ob \CCat
+    \and
     \Idm J [A, B] = J[A,B].
-  \]
+  \end{mathpar}
 \end{defn}
 
 \begin{prop}
-  The $\CCat$-enriched functor $J: \CCat \to \CCat$ decomposes as
+  The $\CCat$-enriched functor $J: \CCat \to \CCat$ decomposes into
   \[
     J: \CCat \xrightarrow{L} \Idm J \xrightarrow{R} \CCat,
   \]
@@ -316,7 +347,7 @@ In the sense that Kleisli categories of monads capture programs with monadic eff
 
 The category $\Idm J$ seems to be a nice category to do idiomatic computations in, because morphisms are effectful, but cant be sequenced based on their return value.
 
-\subsection{The Idiom Calculus}
+\paragraph{The idiom calculus}
 
 \newcommand{\aj}[3]{#1 \vdash_{\mathsf{v}} #2:#3}
 \newcommand{\cj}[3]{#1 \vdash_{\mathsf{c}} #2:#3}
@@ -340,19 +371,60 @@ We begin with value judgements (judgements in $\CCat$) which follow the simply-t
   \and
   \inferrule{\aj \Gamma u {A\to B} \and \aj \Gamma v A}{\aj \Gamma {\app u v} B}
 \end{mathpar}
-We may \emph{lift} value judgements to idiomatic judgements which corresponds to applying $\unit$ to the hom-object.
+We may \emph{lift} value judgements to computation judgements (in the idiomatic sense), which corresponds to applying $\unit$ to the him-object.
 \begin{mathpar}
   \inferrule{\aj \Gamma t A}{\cj \Gamma {\lift t} A}
 \end{mathpar}
-The category $\Idm J$ is symmetric monoidal closed and so we use the linear lambda calculus for computation judgements. We additionally request that
-$\mathsf{lift}$ is a strong symmetric monoidal closed functor. For instance,
+
+\begin{prop}
+  The category $\Idm J$ is symmetric monoidal closed.
+\end{prop}
+
+\begin{proof}
+  \todo{Prove}
+\end{proof}
+
+Given the category $\Idm J$ is symmetric monoidal closed, we use the linear lambda calculus for computation judgements.
+We additionally request that $\mathsf{lift}$ is a strong symmetric monoidal closed functor, in correspondence with $\eta$.
+For instance,
 \begin{mathpar}
   \inferrule{\aj \Gamma u {A\to B} \and \aj \Gamma v A}{\cj \Gamma {{\lift{\app u v}} = \app {\lift u} {\lift v}} B}
 \end{mathpar}
-We may introduce effects via the following judgement.
+For each operator of our idiom, $\sigma : A$, it may be introduced via the following judgement.
 \begin{mathpar}
-  \inferrule{ }{\cj \bullet {\sigma} A}(\sigma \in JA)
+  \inferrule{ }{\cj \bullet {\underline{\sigma}} A}
 \end{mathpar}
+
+\paragraph{Example with streams}
+
+\newcommand{\List}{\mathsf{List}_\omega}
+\newcommand{\pure}{\mathsf{pure}}
+\newcommand{\zip}{\mathsf{zip}}
+
+The zip idiom is defined as $(\List, \pure, \zip)$ where, in Haskell notation:
+\begin{lstlisting}
+pure :: a -> [a]
+pure x = [x,x,..]
+
+zip :: ([a], [b]) -> [(a, b)]
+zip (x:xs, y:ys) = (x,y):zip (xs, ys)
+zip ([], _)      = []
+zip (_, [])      = []
+\end{lstlisting}
+We may give a presentation of this idiom as an operator $\underline{n} = [*,\dots, *]$ of length $n$ for $n\in \mathbb{N}$ and an operator $\underline{\omega} = [1,2,\dots]$.
+See Sean's note for further details.
+These are subject to the following equations:
+\begin{mathpar}
+  \List(\lambda x.(x,x))(\mult(\underline{n}, \underline{m})) = (\underline{\min(n, m)}, \underline{\min(n, m)})
+  \and
+  \pure(x) = \List(\lambda \_.x)(\underline{\omega})
+\end{mathpar}
+We can build the following program:
+\[
+  \cj {f:\mathbb{N} \to A} {\lift{\lambda x. f(\pi_1(x))}(\underline{\omega}, \underline{3})} A
+\]
+The intuition of this program is that it first generates all \emph{worlds} and enumerates them using $\underline{\omega}$.
+The function $f:\mathbb{N}\to A$ performs some action based on that world. However, the operation $\underline{3}$ kills all worlds above enumeration $3$.
 
 \bibliography{refs}
 \bibliographystyle{plainurl}
