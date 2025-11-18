@@ -345,7 +345,19 @@ In the sense that Kleisli categories of monads capture programs with monadic eff
   \end{mathpar}
 \end{prop}
 
+\begin{question}
+  Is this decomposition universal in some way? Much like the way the Kleisli category is the initial resolution of the monad.
+\end{question}
+
 The category $\Idm J$ seems to be a nice category to do idiomatic computations in, because morphisms are effectful, but cant be sequenced based on their return value.
+
+\begin{prop}
+  The category $\Idm J$ is symmetric monoidal closed, and $L$ is a symmetric monoidal closed functor.
+\end{prop}
+
+\begin{proof}
+  \todo{Prove}
+\end{proof}
 
 \paragraph{The idiom calculus}
 
@@ -376,26 +388,22 @@ We may \emph{lift} value judgements to computation judgements (in the idiomatic 
   \inferrule{\aj \Gamma t A}{\cj \Gamma {\lift t} A}
 \end{mathpar}
 
-\begin{prop}
-  The category $\Idm J$ is symmetric monoidal closed.
-\end{prop}
-
-\begin{proof}
-  \todo{Prove}
-\end{proof}
-
 Given the category $\Idm J$ is symmetric monoidal closed, we use the linear lambda calculus for computation judgements.
-We additionally request that $\mathsf{lift}$ is a strong symmetric monoidal closed functor, in correspondence with $\eta$.
+We additionally request that $\mathsf{lift}$ is a symmetric monoidal closed functor, in correspondence with $L$.
 For instance,
 \begin{mathpar}
-  \inferrule{\aj \Gamma u {A\to B} \and \aj \Gamma v A}{\cj \Gamma {{\lift{\app u v}} = \app {\lift u} {\lift v}} B}
+  \inferrule{\aj \Gamma u {A\to B} \and \aj \Gamma v A}{\cj \Gamma {\app {\lift u} {\lift v} = {\lift{\app u v}}} B}
 \end{mathpar}
 For each operator of our idiom, $\sigma : A$, it may be introduced via the following judgement.
 \begin{mathpar}
   \inferrule{ }{\cj \bullet {\underline{\sigma}} A}
 \end{mathpar}
 
-\paragraph{Example with streams}
+\begin{question}
+  Can we find a syntax that is sound and complete for $\Idm J$? What about $R$? Can we develop this further to accommodate the full ``appjuncion'' like as in CBPV?
+\end{question}
+
+\paragraph{Example with zip}
 
 \newcommand{\List}{\mathsf{List}_\omega}
 \newcommand{\pure}{\mathsf{pure}}
