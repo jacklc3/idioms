@@ -54,6 +54,8 @@
  {<-}{$\leftarrow\;$}{2}
 }
 
+\newcommand{\mlstinline}[1]{\mbox{\lstinline|#1|}}
+
 \newtheorem{thm}{Theorem}
 \newtheorem{prop}[thm]{Proposition}
 \newtheorem{cor}[thm]{Corollary}
@@ -158,6 +160,7 @@
 \newcommand{\CCat}{\mathcal{C}}
 \newcommand{\DCat}{\mathcal{D}}
 \newcommand{\GCat}{\mathcal{G}}
+\newcommand{\id}{\mathsf{id}}
 
 \newcommand{\bind}{\mathrel{\scalebox{0.5}[1]{$>\!>=$}}}
 \newcommand{\ob}[1]{{|#1|}}
@@ -175,71 +178,202 @@
 
 \maketitle
 
-The following can be defined at the generality of monoidal categories. However, this seems like overkill for the applications in mind.
-We should at the very most consider symmetric monoidal closed categories but probably easiest to consider Cartesian closed categories.
+\section{Idioms categorically}
+
+The following results can be defined at the generality of (non-symmetric) monoidal/closed categories. However, this seems like overkill for the applications in mind.
+It would also make the theory more convoluted with the need to analyse left and right closed structures individually.
+So for now, we stick to the domain of symmetric monoidal closed categories.
 
 \begin{defn}
-  Let $\CCat$ be a monidal category. An \emph{idiom} is a pointed lax monoidal endofunctor on $\CCat$.
+  Let $(\CCat, I, [{-}, {=}], \iota, j, \psi)$ be a closed category. An \emph{idiom} is a pointed closed endofunctor on $\CCat$.
   That is, an idiom $(J, \unit, \varepsilon, \mult)$ consists of:
   \begin{itemize}
     \item An endofunctor $J: \CCat \to \CCat$,
     \item A family of maps $\unit_A: A \to JA$ natural in $A \in \CCat$,
     \item A map $\varepsilon: 1 \to J1$,
-    \item A family of maps $\mult_{A,B}: JA \times JB \to J(A\times B)$ natural in $A,B \in \CCat$,
+    \item A family of maps $\kappa_{A,B} : J[A,B] \to [JA,JB]$ natural in $A\in\CCat\op$ and $B \in \CCat$,
   \end{itemize}
   such that the following diagrams commute.
   \begin{mathpar}
-    \begin{tikzcd}[column sep=large]
-      {(JA\times JB)\times JC} & {J(A\times B) \times JC} & {J((A\times B)\times C)} \\
-      {JA\times (JB\times JC)} & {JA\times J(B\times C)} & {J(A\times (B\times C))}
-      \arrow["{\phi_{A,B}\times JC}", from=1-1, to=1-2]
-      \arrow["{\alpha_{JA,JB,JC}}"', from=1-1, to=2-1]
-      \arrow["{\phi_{A\times B, C}}", from=1-2, to=1-3]
-      \arrow["{J\alpha_{A,B,C}}", from=1-3, to=2-3]
-      \arrow["{JA\times \phi_{B,C}}"', from=2-1, to=2-2]
-      \arrow["{\phi_{A,B\times C}}"', from=2-2, to=2-3]
-    \end{tikzcd}
-    \and
-    \begin{tikzcd}[column sep=large]
-      {1\times JA} & {J1 \times JA} \\
-      JA & {J(1\times A)}
-      \arrow["{\varepsilon \times JA}", from=1-1, to=1-2]
-      \arrow["{\lambda_{JA}}"', from=1-1, to=2-1]
-      \arrow["{\phi_{A,1}}", from=1-2, to=2-2]
-      \arrow["{J\lambda_A}", from=2-2, to=2-1]
-    \end{tikzcd}
-    \and
-    \begin{tikzcd}[column sep=large]
-      {A\times B} & {JA\times JB} \\
-      & {J(A\times B)}
-      \arrow["{\eta_A\times \eta_B}", from=1-1, to=1-2]
-      \arrow["{\eta_{A\times B}}"', from=1-1, to=2-2]
-      \arrow["{\phi_{A,B}}", from=1-2, to=2-2]
+    \begin{tikzcd}
+      I & {[JA,JA]} \\
+      JI & {J[A,A]}
+      \arrow["{j_{JA}}", from=1-1, to=1-2]
+      \arrow["\varepsilon"', from=1-1, to=2-1]
+      \arrow["{Jj_A}"', from=2-1, to=2-2]
+      \arrow["{\kappa_{A,A}}"', from=2-2, to=1-2]
     \end{tikzcd}
     \and
     \begin{tikzcd}
-      1 \\
-      & J1
+      {J[I,A]} & {[JI,JA]} \\
+      JA & {[I,JA]}
+      \arrow["{\kappa_{I,A}}", from=1-1, to=1-2]
+      \arrow["{J\iota_A}"', from=1-1, to=2-1]
+      \arrow["{[\varepsilon,JA]}", from=1-2, to=2-2]
+      \arrow["{\iota^{-1}_{JA}}"', from=2-1, to=2-2]
+    \end{tikzcd}
+    \and
+    \begin{tikzcd}[column sep=large]
+      {J[B,C]} & {J[[A,B],[A,C]]} & {[J[A,B], J[A,C]]} \\
+      {[JB,JC]} & {[[JA,JB],[JA,JC]]} & {[J[A,B], [JA,JC]]}
+      \arrow["{J\psi^A_{B,C}}", from=1-1, to=1-2]
+      \arrow["{\kappa_{B,C}}"', from=1-1, to=2-1]
+      \arrow["{\kappa_{[A,B],[A,C]}}", from=1-2, to=1-3]
+      \arrow["{[J[A,B], \kappa_{A,C}]}", from=1-3, to=2-3]
+      \arrow["{\psi^{JA}_{JB,JC}}"', from=2-1, to=2-2]
+      \arrow["{[\kappa_{A,B}, [JA,JC]]}"', from=2-2, to=2-3]
+    \end{tikzcd}
+    \and
+    \begin{tikzcd}
+      I \\
+      & JI
       \arrow["\varepsilon"', curve={height=12pt}, from=1-1, to=2-2]
-      \arrow["{\eta_1}", curve={height=-12pt}, from=1-1, to=2-2]
+      \arrow["{\eta_I}", curve={height=-12pt}, from=1-1, to=2-2]
+    \end{tikzcd}
+    \and
+    \begin{tikzcd}
+      {[A,B]} & {[A,JB]} \\
+      {J[A,B]} & {[JA,JB]}
+      \arrow["{[A,\eta_B]}", from=1-1, to=1-2]
+      \arrow["{\eta_{[A,B]}}"', from=1-1, to=2-1]
+      \arrow["{\kappa_{A,B}}"', from=2-1, to=2-2]
+      \arrow["{[\eta_A, JB]}"', from=2-2, to=1-2]
     \end{tikzcd}
   \end{mathpar}
   The coherences imply that $\varepsilon = \unit_1$, so we often elide it.
 \end{defn}
+The applicative typeclass in Haskell is the following:
+\begin{lstlisting}
+  class Applicative j where
+    pure :: a -> j a
+    ** :: j (a -> b) -> (j a -> j b)
+\end{lstlisting}
+They must satisfy the following laws:
+\begin{lstlisting}
+  pure id ** u = u
+  ((pure (.) ** u) ** v) ** w = u ** (v ** w)
+  pure f ** pure x = pure (f x)
+  u ** pure x = pure (\f -> f x) ** u
+\end{lstlisting}
+We can see that the data of an applicative in Haskell is the same as the data of an idiom defined above (where $\varepsilon = \mlstinline{pure ()}$ implicitly).
+Each law corresponds to one of those above (beside the trivial $\varepsilon = \eta_I$) except for the exchange law,
+which when instantiating into Haskell notation gives:
+\begin{lstlisting}
+  u ** pure () = pure (\f -> f ()) ** u
+\end{lstlisting}
 
-Idioms can be categorically presented as \emph{strong} lax monoidal functors~\cite{mcbride-applicatives}.
-The following proposition links this presentation to the above definition. It seems like folklore, but I haven't seen it written down anywhere.
-Kock~\cite{kock-strong-functors} proves part of this result (pointed lax monoidal implies strong lax monoidal) but not the reverse direction.
-The benefits of the above definition is that there are way fewer coherence diagrams to check.
-Also, it aligns with the data of applicatives in Haskell way more closely.
+\begin{question}
+Given Haskell is a ``Cartesian closed category'', can we derive
+\begin{lstlisting}
+  u ** pure x = pure (\f -> f x) ** u
+\end{lstlisting}
+from
+\begin{lstlisting}
+  u ** pure () = pure (\f -> f ()) ** u
+\end{lstlisting}
+If not, which is the correct definition? In the latter case, an idiom is not simply a \emph{strong lax monoidal endofunctor}, but something slightly stronger.
+\end{question}
 
-\begin{prop}
-  \label{prop:strongandpointed}
-  Let $\CCat$ be a monidal category. The following data are equivalent:
+\subsection{Relating other categorical definitions of idioms}
+
+Idioms have also been described as \emph{strong lax monoidal functors}~\cite{mcbride-applicatives}.
+The following propositions link this presentation to the above definition. It seems like folklore, but I haven't seen it properly written down anywhere.
+
+\begin{prop} \label{prop:strong-pointed-closed}
+  Let $(\CCat, I, [{-}, {=}])$ be a closed category and $(J, \varepsilon, \kappa): \CCat \to \CCat$ a lax closed endofunctor. Then, the following data are equivalent:
   \begin{enumerate}
-    \item A lax monoidal endofunctor $(J, \varepsilon, \phi): \CCat \to \CCat$ with monoidal pointedness $\eta_A: A \to JA$.
-      In particular, the following diagrams commute.
+    \item A closed natural transformation $\eta: \id_\CCat \to J$. That is, the following diagrams commute.
       \begin{mathpar}
+        \begin{tikzcd}
+          I \\
+          & JI
+          \arrow["\varepsilon"', curve={height=12pt}, from=1-1, to=2-2]
+          \arrow["{\eta_I}", curve={height=-12pt}, from=1-1, to=2-2]
+        \end{tikzcd}
+        \and
+        \begin{tikzcd}
+          {[A,B]} & {[A,JB]} \\
+          {J[A,B]} & {[JA,JB]}
+          \arrow["{[A,\eta_B]}", from=1-1, to=1-2]
+          \arrow["{\eta_{[A,B]}}"', from=1-1, to=2-1]
+          \arrow["{\kappa_{A,B}}"', from=2-1, to=2-2]
+          \arrow["{[\eta_A, JB]}"', from=2-2, to=1-2]
+        \end{tikzcd}
+      \end{mathpar}
+    \item A closed strength $\theta: [{-}, {=}] \to [J{-}, J{=}]$. That is, the following diagrams commute.
+      \begin{mathpar}
+        \begin{tikzcd}
+          I & {[A,A]} \\
+          & {[JA,JA]}
+          \arrow["{j_A}", from=1-1, to=1-2]
+          \arrow["{j_{JA}}"', from=1-1, to=2-2]
+          \arrow["{\theta_{A,A}}", from=1-2, to=2-2]
+        \end{tikzcd}
+        \and
+        \begin{tikzcd}
+          {[B,C]} & {[JB,JC]} & {[[JA,JB],[JA,JC]]} \\
+          {[[A,B],[A,C]]} && {[[A,B],[JA,JC]]}
+          \arrow["{\theta_{B,C}}", from=1-1, to=1-2]
+          \arrow["{\psi^A_{B,C}}"', from=1-1, to=2-1]
+          \arrow["{\psi^{JA}_{JB,JC}}", from=1-2, to=1-3]
+          \arrow["{[\theta_{A,B},[JA,JC]]}", from=1-3, to=2-3]
+          \arrow["{[[A,B],\theta_{A,C}]}"', from=2-1, to=2-3]
+        \end{tikzcd}
+      \end{mathpar}
+  \end{enumerate}
+\end{prop}
+
+\begin{proof}
+  In the forwards direction, we define:
+  \[
+    \theta_{A,B}: [A,B] \xrightarrow{\eta_{[A,B]}} J[A,B] \xrightarrow{\kappa_{A,B}} [JA,JB]
+  \]
+  In the reverse direction, we define:
+  \[
+    \eta_A : A \xrightarrow{\iota^{-1}_A} [I,A] \xrightarrow{\theta_{I,A}} [JI,JA] \xrightarrow{[\varepsilon, JA]} [I,JA] \xrightarrow{\iota_{JA}} JA
+  \]
+  The equations follow from a diagram chase. \todo{J: I still need to do this for the reverse direction}
+\end{proof}
+
+This result states that idioms are also described by \emph{strong lax closed endofunctors}.
+A theorem of Kock gives the correspondence between strong lax closed endofunctors and strong lax monoidal endofunctors when $\CCat$ is a symmetric monoidal closed category,
+which formally aligns the commonly stated folklore that an idion is just a \emph{strong lax monoidal endofunctor}.
+
+\begin{prop}[\cite{kock-strong-functors}] \label{prop:strong-monoidal-closed}
+  Let $(\CCat, I, \otimes, [{-},{=}])$ be a symmetric monoidal closed category and $J: \CCat \to \CCat$ an endofunctor.
+  Then, the following are equivalent:
+  \begin{enumerate}
+    \item The data to make $J$ a strong lax monoidal functor.
+    \item The data to make $J$ a strong lax closed functor.
+  \end{enumerate}
+\end{prop}
+
+We may close the following diagram in the symmetric monoidal closed case with a final proposition.
+\[
+  \begin{tikzcd}
+    {\text{Strong lax closed}} & {\text{Strong lax monoidal}} \\
+    {\text{Pointed lax closed}} & {\text{Pointed lax monoidal}}
+    \arrow["\cong"{description}, draw=none, from=1-1, to=1-2]
+    \arrow["\cong"{description}, draw=none, from=1-1, to=2-1]
+    \arrow["\cong"{description}, draw=none, from=1-2, to=2-2]
+    \arrow["\cong"{description}, draw=none, from=2-1, to=2-2]
+  \end{tikzcd}
+\]
+The benefits of this final presentation over the strong lax monoidal presentation is that there are fewer coherence diagrams to check.
+
+\begin{prop} \label{prop:strong-pointed-monoidal}
+  Let $(\CCat, I, \otimes)$ be a symmetric monoidal category and $(J, \varepsilon, \phi): \CCat \to \CCat$ a lax monoidal endofunctor.
+  Then, the following data are equivalent:
+  \begin{enumerate}
+    \item A monoidal natural transformation $\eta: \id_\CCat \to J$. That is, the following diagrams commute.
+      \begin{mathpar}
+        \begin{tikzcd}
+          I \\
+          & JI
+          \arrow["\varepsilon"', curve={height=12pt}, from=1-1, to=2-2]
+          \arrow["{\eta_I}", curve={height=-12pt}, from=1-1, to=2-2]
+        \end{tikzcd}
+        \and
         \begin{tikzcd}[column sep=large]
           {A\otimes B} & {JA\otimes JB} \\
           & {J(A\otimes B)}
@@ -247,86 +381,64 @@ Also, it aligns with the data of applicatives in Haskell way more closely.
           \arrow["{\eta_{A\otimes B}}"', from=1-1, to=2-2]
           \arrow["{\phi_{A,B}}", from=1-2, to=2-2]
         \end{tikzcd}
-        \and
-        \begin{tikzcd}
-          I \\
-          & JI
-          \arrow["\varepsilon"', curve={height=12pt}, from=1-1, to=2-2]
-          \arrow["{\eta_I}", curve={height=-12pt}, from=1-1, to=2-2]
-        \end{tikzcd}
       \end{mathpar}
-    \item A lax monoidal endofunctor $(J, \varepsilon, \phi): \CCat \to \CCat$ with monoidal bistrength $\sigma^l_{A,B}, \sigma^r_{A,B}$.
-      In particular, the following diagrams commute.
+    \item A monoidal tensorial strength $\theta: ({-} \otimes J{=}) \to J({-}\otimes {=})$. That is, the following diagram commutes.
       \begin{mathpar}
         \begin{tikzcd}[column sep=large]
           {(A\otimes JB)\otimes JC} & {J(A\otimes B)\otimes JC} & {J((A\otimes B)\otimes C)} \\
           {A\otimes (JB\otimes JC)} & {A\otimes J(B\otimes C)} & {J(A\otimes (B\otimes C))}
-          \arrow["{\sigma^l_{A,B}\otimes JC}", from=1-1, to=1-2]
+          \arrow["{\theta^l_{A,B}\otimes JC}", from=1-1, to=1-2]
           \arrow["{\alpha_{A,JB,JC}}"', from=1-1, to=2-1]
           \arrow["{\phi_{A\otimes B, C}}", from=1-2, to=1-3]
           \arrow["{J\alpha_{A,B,C}}", from=1-3, to=2-3]
           \arrow["{A\otimes \phi_{B,C}}"', from=2-1, to=2-2]
-          \arrow["{\sigma^l_{A,B\otimes C}}"', from=2-2, to=2-3]
-        \end{tikzcd}
-        \and
-        \begin{tikzcd}[column sep=large]
-          {(JA\otimes JB)\otimes C} & {J(A\otimes B) \otimes C} & {J((A\otimes B)\otimes C)} \\
-          {JA\otimes (JB\otimes C)} & {JA\otimes J(B\otimes C)} & {J(A\otimes (B\otimes C))}
-          \arrow["{\phi_{A,B}\otimes C}", from=1-1, to=1-2]
-          \arrow["{\alpha_{JA,JB,C}}"', from=1-1, to=2-1]
-          \arrow["{\sigma^r_{A\otimes B, C}}", from=1-2, to=1-3]
-          \arrow["{J\alpha_{A,B,C}}", from=1-3, to=2-3]
-          \arrow["{JA\otimes \sigma^r_{B,C}}"', from=2-1, to=2-2]
-          \arrow["{\phi_{A,B\otimes C}}"', from=2-2, to=2-3]
+          \arrow["{\theta^l_{A,B\otimes C}}"', from=2-2, to=2-3]
         \end{tikzcd}
       \end{mathpar}
   \end{enumerate}
 \end{prop}
 
 \begin{proof}
-  In the forwards direction, we define
-  \begin{align*}
-    \sigma^l_{A,B}: &A \otimes JB \xrightarrow{\eta_A \otimes JB} JA \otimes JB \xrightarrow{\phi_{A,B}} J(A\otimes B), \\
-    \sigma^r_{A,B}: &JA \otimes B \xrightarrow{JA \otimes \eta_B} JA \otimes JB \xrightarrow{\phi_{A,B}} J(A\otimes B).
-  \end{align*}
-  In the reverse direction, we define
+  In the forwards direction, we define:
   \[
-    \eta_A: A \xrightarrow{\lambda_A^{-1}} I \otimes A \xrightarrow{\varepsilon \otimes A} JI \otimes A \xrightarrow{\sigma^r_{I,A}} J(I\otimes A) \xrightarrow{J\lambda_A} JA.
+    \theta_{A,B}: A \otimes JB \xrightarrow{\eta_A \otimes JB} JA \otimes JB \xrightarrow{\phi_{A,B}} J(A\otimes B)
   \]
-  Note that this is equivalent to defining
+  In the reverse direction, we define:
   \[
-    \eta_A: A \xrightarrow{\rho_A^{-1}} A \otimes I \xrightarrow{A \otimes \varepsilon} A \otimes JI \xrightarrow{\sigma^l_{A,I}} J(A \otimes I) \xrightarrow{J\rho_A} JA.
+    \eta_A: A \xrightarrow{\rho_A^{-1}} A \otimes I \xrightarrow{A \otimes \varepsilon} A \otimes JI \xrightarrow{\theta_{A,I}} J(A \otimes I) \xrightarrow{J\rho_A} JA.
   \]
   The coherences lift through correspondingly.
 \end{proof}
 
-\paragraph{Enrichment for free}
+\subsection{Enrichment for free}
+
+Any idiom is an enriched idiom.
 
 \begin{prop}
-Let $\CCat$ be a Cartesian closed category. Given an idiom $(J_0, \unit, \mult)$ on $\CCat$,
-there is a $\CCat$-enriched functor $J : \CCat \to \CCat$ that has same mapping on objects
-as $J_0$, and its mapping on hom-objects $J_{A,B}: [A,B] \to [JA, JB]$ is given by the transpose of:
-\[
-  [A,B] \times JA \xrightarrow{\unit_{[A,B]} \times JA} J[A,B] \times JA \xrightarrow{\mult_{[A,B], A}} J([A,B] \times A) \xrightarrow{J\mathsf{ev}_{A,B}} JB
-\]
-Moreover, $J$ is enriched pointed lax monoidal, and so is an enriched idiom.
+  Let $\CCat$ be a Cartesian closed category. Given an idiom $(J_0, \unit, \kappa)$ on $\CCat$,
+  there is a $\CCat$-enriched functor $J : \CCat \to \CCat$ that has same mapping on objects
+  as $J_0$, and its mapping on hom-objects is $J_{A,B} = \kappa_{A,B}: [A,B] \to [JA, JB]$.
+
+  Moreover, $J$ is enriched pointed lax monoidal, and so is an enriched idiom.
 \end{prop}
 
 \begin{proof}
-  For the purpose of this proof, it is easier to consider $J_0$ equivalently as a strong lax monoidal functor by \Cref{prop:strongandpointed}. Then, as shown by \cite{kock-strong-functors}, $J$ is automatically a $\CCat$-enriched functor by the definition above. In particular, one can easily check that $J$ and $J_0$ have the same action on morphisms, i.e. for every $f: A \to B$: 
-% https://q.uiver.app/#q=WzAsMyxbMCwwLCJJIl0sWzIsMCwiW0EsQl0iXSxbMiwxLCJbSkEsIEpCXSJdLFswLDEsImN1cihmXFxjaXJjIFxcbGFtYmRhXnstMX0pIl0sWzEsMiwiSl97QSxCfSJdLFswLDIsImN1cihKXzAoZilcXGNpcmMgXFxsYW1iZGFeey0xfSkiLDJdXQ==
-\[\begin{tikzcd}
-	I && {[A,B]} \\
-	&& {[JA, JB]}
-	\arrow["{cur(f\circ \lambda^{-1})}", from=1-1, to=1-3]
-	\arrow["{cur(J_0(f)\circ \lambda^{-1})}"', from=1-1, to=2-3]
-	\arrow["{J_{A,B}}", from=1-3, to=2-3]
-\end{tikzcd}\]
-
-It remains to show that $J$ is enriched pointed lax monoidal. For this, it suffices to take the transpose of $\eta$ and $\phi$ and prove that the adequate diagrams commute. \todo{Theo to prove this. Elementary proof shouldn't be hard but does this follow from abstract nonsense?}
+  For the purpose of this proof, it is easier to consider $J_0$ equivalently as a strong lax monoidal functor by \Cref{prop:strong-pointed-monoidal}. Then, as shown by \cite{kock-strong-functors}, $J$ is automatically a $\CCat$-enriched functor by the definition above. In particular, one can easily check that $J$ and $J_0$ have the same action on morphisms, i.e. for every $f: A \to B$: 
+  \[
+  \begin{tikzcd}
+    I && {[A,B]} \\
+    && {[JA, JB]}
+    \arrow["{cur(f\circ \lambda^{-1})}", from=1-1, to=1-3]
+    \arrow["{cur(J_0(f)\circ \lambda^{-1})}"', from=1-1, to=2-3]
+    \arrow["{J_{A,B}}", from=1-3, to=2-3]
+  \end{tikzcd}
+  \]
+  It remains to show that $J$ is enriched pointed lax monoidal.
+  For this, it suffices to take the transpose of $\eta$ and $\phi$ and prove that the adequate diagrams commute.
+  \todo{Theo to prove this. Elementary proof shouldn't be hard but does this follow from abstract nonsense?}
 \end{proof}
 
-\paragraph{The idiom category}
+\section{The idiom category}
 
 The goal of this section is to define a Kleisli-like category for idioms.
 In the sense that Kleisli categories of monads capture programs with monadic effects, we would like the Kleisli-like category to capture programs with idiomatic effects.
@@ -336,7 +448,7 @@ In the sense that Kleisli categories of monads capture programs with monadic eff
   We define the category $\Idm J$ as the image of the category $\CCat$ under the change of base along $J$.
   That is,
   \begin{mathpar}
-    \ob {\Idm J} = \ob \CCat
+    \ob {\Idm J} = \ob \CCat,
     \and
     \Idm J (A, B) = J[A,B].
   \end{mathpar}
@@ -371,31 +483,39 @@ The category $\Idm J$ seems to be a nice category to do idiomatic computations i
   \todo{Prove}
 \end{proof}
 
-\paragraph{Relating the idiom category to the Kleisli category} In Haskell, a (strong) monad is also an idiom. Mathematically, let $\CCat$ be cartesian closed. Then, any (bi)strong monad $(T, \eta, \mu, \sigma_l, \sigma^r)$ (equivalently a $\CCat$-enriched monad) over $\CCat$ is also a pointed lax monoidal functor, with the point given as the return and the lax multiplication $\phi_{A, B} : T(A) \times T(B) \to T(A \times B)$ defined as the composite:
-\[
-T(A) \times T(B) \xrightarrow{\sigma^r} T(A \times T(B)) \xrightarrow{T(\sigma^l)} TT(A \times B) \xrightarrow{\mu} T(A\times B)
-\]
+\subsection{Relating the idiom category to the Kleisli category}
 
-It is easy to define a $\CCat$-functor $F: \Idm{T} \to \Kl(T)$ which is identity on objects and has its action on morphism $F_{A, B}$ defined as the following composition:
+In Haskell, a (strong) monad is also an idiom. Mathematically, let $\CCat$ be cartesian closed.
+Then, any strong monad $(T, \eta, \mu, \theta)$ (equivalently a $\CCat$-enriched monad) over $\CCat$ is also a pointed lax monoidal functor,
+with the point given as the return and the lax multiplication defined as the composite,
 \[
-T([A, B]) \xrightarrow{} [T(A), T(B)] \xrightarrow{\eta_A \circ \rho^{-1}} [T(A), T(B)] \times [A, T(A)] \xrightarrow{\circ} [A, T(B)]
+  \phi_{A,B}: TA \times TB \xrightarrow{\tilde\theta_{A,TB}} T(A \times TB) \xrightarrow{T\theta_{A,B}} TT(A \times B) \xrightarrow{\mu_{A\times B}} T(A\times B),
 \]
-where the first arrow is exactly the same as $R_{A, B}$ (this corresponds to the \texttt{<*>} operation in the Haskell interface). 
+where $\tilde\theta_{A,B} : TA \times B \to T(A\times B)$ is the right strength given by the symmetry of the CCC.
+Note, we can define a second lax multiplication by chaining the strengths in the opposite order,
+and these composites are equal if and only if $T$ is commutative~\cite{kock-strong-functors}.
+
+It is easy to define a $\CCat$-enriched functor $F: \Idm{T} \to \Kl(T)$ which is identity on objects and has its action on morphism $F_{A, B}$ defined as the following composition:
+\[
+  T[A, B] \xrightarrow{} [TA, TB] \xrightarrow{[\eta_A, TB]} [A, TB]
+\]
+where the first arrow is exactly the same as $R_{A, B}$ (this corresponds to the \texttt{<*>} operation in the Haskell interface).
 
 \begin{prop}
-  In the following diagram, $F \circ L = L'$ and $R' \circ F = R$. 
-  % https://q.uiver.app/#q=WzAsMyxbMSwyLCJcXENDYXQiXSxbMiwwLCJcXEtsKFQpIl0sWzAsMCwiXFxJZG17VH0iXSxbMiwxLCJGIl0sWzAsMiwiTCIsMCx7ImN1cnZlIjotMX1dLFsyLDAsIlIiLDAseyJvZmZzZXQiOi0xLCJjdXJ2ZSI6LTF9XSxbMCwxLCJMJyIsMCx7Im9mZnNldCI6MSwiY3VydmUiOi0xfV0sWzEsMCwiUiciLDAseyJvZmZzZXQiOi0zLCJjdXJ2ZSI6LTF9XSxbNiw3LCIiLDAseyJvZmZzZXQiOi0xLCJsZXZlbCI6MSwic3R5bGUiOnsibmFtZSI6ImFkanVuY3Rpb24ifX1dXQ==
-\[\begin{tikzcd}
-	{\Idm{T}} && {\Kl(T)} \\
-	\\
-	& \CCat
-	\arrow["F", from=1-1, to=1-3]
-	\arrow["R", shift left, curve={height=-6pt}, from=1-1, to=3-2]
-	\arrow[""{name=0, anchor=center, inner sep=0}, "{R'}", shift left=3, curve={height=-6pt}, from=1-3, to=3-2]
-	\arrow["L", curve={height=-6pt}, from=3-2, to=1-1]
-	\arrow[""{name=1, anchor=center, inner sep=0}, "{L'}", shift right, curve={height=-6pt}, from=3-2, to=1-3]
-	\arrow["\dashv"{anchor=center, rotate=-20}, shift left, draw=none, from=1, to=0]
-\end{tikzcd}\]
+  In the following diagram, $F \circ L = L'$ and $R' \circ F = R$.
+  \[
+  \begin{tikzcd}
+    {\Idm{T}} && {\Kl(T)} \\
+    \\
+    & \CCat
+    \arrow["F", from=1-1, to=1-3]
+    \arrow["R", shift left, curve={height=-6pt}, from=1-1, to=3-2]
+    \arrow[""{name=0, anchor=center, inner sep=0}, "{R'}", shift left=3, curve={height=-6pt}, from=1-3, to=3-2]
+    \arrow["L", curve={height=-6pt}, from=3-2, to=1-1]
+    \arrow[""{name=1, anchor=center, inner sep=0}, "{L'}", shift right, curve={height=-6pt}, from=3-2, to=1-3]
+    \arrow["\dashv"{anchor=center, rotate=-20}, shift left, draw=none, from=1, to=0]
+  \end{tikzcd}
+  \]
 \end{prop}
 \begin{proof}
   \todo{Prove}
@@ -411,7 +531,7 @@ Theoretical questions aside, this presentation could help express the relationsh
   How do our constructions relate to \texttt{ApplicativeDo}? 
 \end{question}
 
-\paragraph{The idiom calculus}
+\section{The idiom calculus}
 
 \newcommand{\aj}[3]{#1 \vdash_{\mathsf{v}} #2:#3}
 \newcommand{\cj}[3]{#1 \vdash_{\mathsf{c}} #2:#3}
@@ -435,7 +555,7 @@ We begin with value judgements (judgements in $\CCat$) which follow the simply-t
   \and
   \inferrule{\aj \Gamma u {A\to B} \and \aj \Gamma v A}{\aj \Gamma {\app u v} B}
 \end{mathpar}
-We may \emph{lift} value judgements to computation judgements (in the idiomatic sense), which corresponds to applying $\unit$ to the him-object.
+We may \emph{lift} value judgements to computation judgements (in the idiomatic sense), which corresponds to applying $\unit$ to the hom-object.
 \begin{mathpar}
   \inferrule{\aj \Gamma t A}{\cj \Gamma {\lift t} A}
 \end{mathpar}
@@ -455,7 +575,7 @@ For each operator of our idiom, $\sigma : A$, it may be introduced via the follo
   Can we find a syntax that is sound and complete for $\Idm J$? What about $R$? Can we develop this further to accommodate the full ``appjuncion'' like as in CBPV?
 \end{question}
 
-\paragraph{Example with zip}
+\subsection{Example with zip}
 
 \newcommand{\List}{\mathsf{List}_\omega}
 \newcommand{\pure}{\mathsf{pure}}
