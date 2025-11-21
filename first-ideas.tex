@@ -277,7 +277,7 @@ If not, which is the correct definition? In the latter case, an idiom is not sim
 \subsection{Relating other categorical definitions of idioms}
 
 Idioms have also been described as \emph{strong lax monoidal functors}~\cite{mcbride-applicatives}.
-The following propositions link this presentation to the above definition. It seems like folklore, but I haven't seen it properly written down anywhere.
+The following results link this presentation to the above definition. It seems like folklore, but I haven't seen it properly written down anywhere.
 
 \begin{prop} \label{prop:strong-pointed-closed}
   Let $(\CCat, I, [{-}, {=}])$ be a closed category and $(J, \varepsilon, \kappa): \CCat \to \CCat$ a lax closed endofunctor. Then, the following data are equivalent:
@@ -344,31 +344,7 @@ The following propositions link this presentation to the above definition. It se
 \end{proof}
 
 This result states that idioms are also described by \emph{strong lax closed endofunctors}.
-A theorem of Kock gives the correspondence between strong lax closed endofunctors and strong lax monoidal endofunctors when $\CCat$ is a symmetric monoidal closed category,
-which formally aligns the commonly stated folklore that an idion is just a \emph{strong lax monoidal endofunctor}.
-
-\begin{prop}[\cite{kock-strong-functors}] \label{prop:strong-monoidal-closed}
-  Let $(\CCat, I, \otimes, [{-},{=}])$ be a symmetric monoidal closed category and $J: \CCat \to \CCat$ an endofunctor.
-  Then, the following are equivalent:
-  \begin{enumerate}
-    \item The data to make $J$ a strong lax monoidal functor.
-    \item The data to make $J$ a strong lax closed functor.
-  \end{enumerate}
-\end{prop}
-\todo{J: I'm not sure Kock actually proved this for coherences between the coherence conditions of strength. We may need to show this ourselves.}
-
-We may close the following diagram in the symmetric monoidal closed case with a final proposition.
-\[
-  \begin{tikzcd}
-    {\text{Strong lax closed}} & {\text{Strong lax monoidal}} \\
-    {\text{Pointed lax closed}} & {\text{Pointed lax monoidal}}
-    \arrow["\cong"{description}, draw=none, from=1-1, to=1-2]
-    \arrow["\cong"{description}, draw=none, from=1-1, to=2-1]
-    \arrow["\cong"{description}, draw=none, from=1-2, to=2-2]
-    \arrow["\cong"{description}, draw=none, from=2-1, to=2-2]
-  \end{tikzcd}
-\]
-The benefits of this final presentation over the strong lax monoidal presentation is that there are fewer coherence diagrams to check.
+We next give a result that connects strong and pointed endofunctors in the monoidal setting.
 
 \begin{prop} \label{prop:strong-pointed-monoidal}
   Let $(\CCat, I, \otimes)$ be a symmetric monoidal category and $(J, \varepsilon, \phi): \CCat \to \CCat$ a lax monoidal endofunctor.
@@ -418,6 +394,40 @@ The benefits of this final presentation over the strong lax monoidal presentatio
   \]
   The coherences lift through correspondingly.
 \end{proof}
+
+We now establish the connection between the closed setting and the monoidal setting when the category is symmetric monoidal closed.
+
+\begin{thm} \label{prop:strong-monoidal-closed}
+  Let $(\CCat, I, \otimes, [{-},{=}])$ be a symmetric monoidal closed category and $J: \CCat \to \CCat$ an endofunctor.
+  Then, the following are equivalent:
+  \begin{enumerate}
+    \item The data to make $J$ a pointed lax closed functor.
+    \item The data to make $J$ a strong lax closed functor.
+    \item The data to make $J$ a pointed lax monoidal functor.
+    \item The data to make $J$ a strong lax monoidal functor.
+  \end{enumerate}
+\end{thm}
+
+\begin{proof}
+  The correspondence between items (1) and (2) are given by \Cref{prop:strong-pointed-closed}.
+  The correspondence between items (3) and (4) are given by \Cref{prop:strong-pointed-monoidal}.
+  It is well-known that there is a correspondence between the data to make $J$ a lax monoidal functor and a lax closed functor when $\CCat$ is symmetric monoical closed~\cite{kock-strong-functors}.
+  However, we do not know of any proof showing that the data for coherent strengths or pointedness are equivalent too.
+  The correspondence between coherent pointedness has fewer proof obligations with only one pair of diagrams required to be equivalent across the closed adjunction.
+  This is shown by a straightforward diagram chase.
+\end{proof}
+
+This formally aligns the commonly stated folklore that an idiom is \emph{just} a strong lax monoidal endofunctor by closing all sides of the correspondence square.
+\[
+  \begin{tikzcd}
+    {\text{Pointed lax closed}} & {\text{Pointed lax monoidal}} \\
+    {\text{Strong lax closed}} & {\text{Strong lax monoidal}}
+    \arrow["\cong"{description}, draw=none, from=1-1, to=1-2]
+    \arrow["\cong"{description}, draw=none, from=1-1, to=2-1]
+    \arrow["\cong"{description}, draw=none, from=1-2, to=2-2]
+    \arrow["\cong"{description}, draw=none, from=2-1, to=2-2]
+  \end{tikzcd}
+\]
 
 \subsection{Enrichment for free}
 
