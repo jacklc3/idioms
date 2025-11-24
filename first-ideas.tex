@@ -610,15 +610,17 @@ zip (_, [])      = []
 \end{lstlisting}
 We may give a presentation of this idiom as an operator $\underline{n} = [*,\dots, *]$ of length $n$ for $n\in \mathbb{N}$ and an operator $\underline{\omega} = [1,2,\dots]$.
 See Sean's note for further details.
-These are subject to the following equations:
+These are subject to the equations
 \begin{mathpar}
-  \List(\lambda x.(x,x))(\mult(\underline{n}, \underline{m})) = (\underline{\min(n, m)}, \underline{\min(n, m)})
+  \List(\lambda x.(x,x))(\mult(\underline{m}, \underline{n})) = (\underline{m\sqcup n}, \underline{m\sqcup n}),
   \and
-  \pure(x) = \List(\lambda \_.x)(\underline{\omega})
+  \pure(x) = \List(\lambda \_.x)(\underline{\omega}),
 \end{mathpar}
+where $m \sqcup n = \min(m,n)$.
+
 We can build the following program:
 \[
-  \cj {f:\mathbb{N} \to A} {\lift{\lambda x. f(\pi_1(x))}(\underline{\omega}, \underline{3})} A
+  \cj {f:\mathbb{N} \to A} {\app{\lift{\lambda x. \app {f}{(\pi_1x)}}} {(\underline{\omega}, \underline{3})}} A
 \]
 The intuition of this program is that it first generates all \emph{worlds} and enumerates them using $\underline{\omega}$.
 The function $f:\mathbb{N}\to A$ performs some action based on that world. However, the operation $\underline{3}$ kills all worlds above enumeration $3$.
