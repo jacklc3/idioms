@@ -8,6 +8,7 @@
 \usepackage{datetime}
 \usepackage{enumerate}
 \usepackage{graphicx}
+\usepackage[margin=1in]{geometry}
 \usepackage{hyperref}
 \usepackage{mathpartir}
 \usepackage{quiver}
@@ -185,7 +186,7 @@ It would also make the theory more convoluted with the need to analyse left and 
 So for now, we stick to the domain of symmetric monoidal closed categories.
 
 \begin{defn}
-  Let $(\CCat, I, [{-}, {=}], \iota, j, \psi)$ be a closed category. An \emph{idiom} is a pointed closed endofunctor on $\CCat$.
+  Let $(\CCat, I, [{-}, {=}], \iota, \jmath, \psi)$ be a closed category. An \emph{idiom} is a pointed closed endofunctor on $\CCat$.
   That is, an idiom $(J, \unit, \varepsilon, \mult)$ consists of:
   \begin{itemize}
     \item An endofunctor $J: \CCat \to \CCat$,
@@ -198,9 +199,9 @@ So for now, we stick to the domain of symmetric monoidal closed categories.
     \begin{tikzcd}
       I & {[JA,JA]} \\
       JI & {J[A,A]}
-      \arrow["{j_{JA}}", from=1-1, to=1-2]
+      \arrow["{\jmath_{JA}}", from=1-1, to=1-2]
       \arrow["\varepsilon"', from=1-1, to=2-1]
-      \arrow["{Jj_A}"', from=2-1, to=2-2]
+      \arrow["{J\jmath_A}"', from=2-1, to=2-2]
       \arrow["{\kappa_{A,A}}"', from=2-2, to=1-2]
     \end{tikzcd}
     \and
@@ -213,7 +214,7 @@ So for now, we stick to the domain of symmetric monoidal closed categories.
       \arrow["{\iota^{-1}_{JA}}"', from=2-1, to=2-2]
     \end{tikzcd}
     \and
-    \begin{tikzcd}[column sep=large]
+    \begin{tikzcd}[column sep=6.5em]
       {J[B,C]} & {J[[A,B],[A,C]]} & {[J[A,B], J[A,C]]} \\
       {[JB,JC]} & {[[JA,JB],[JA,JC]]} & {[J[A,B], [JA,JC]]}
       \arrow["{J\psi^A_{B,C}}", from=1-1, to=1-2]
@@ -223,7 +224,7 @@ So for now, we stick to the domain of symmetric monoidal closed categories.
       \arrow["{\psi^{JA}_{JB,JC}}"', from=2-1, to=2-2]
       \arrow["{[\kappa_{A,B}, [JA,JC]]}"', from=2-2, to=2-3]
     \end{tikzcd}
-    \and
+    \\
     \begin{tikzcd}
       I \\
       & JI
@@ -261,18 +262,13 @@ which when instantiating into Haskell notation gives:
 \begin{lstlisting}
   u ** pure () = pure (\f -> f ()) ** u
 \end{lstlisting}
-
-\begin{question}
-Given Haskell is a ``Cartesian closed category'', can we derive
+It is not possible to express the interchange law of applicative functors
 \begin{lstlisting}
   u ** pure x = pure (\f -> f x) ** u
 \end{lstlisting}
-from
-\begin{lstlisting}
-  u ** pure () = pure (\f -> f ()) ** u
-\end{lstlisting}
-If not, which is the correct definition? In the latter case, an idiom is not simply a \emph{strong lax monoidal endofunctor}, but something slightly stronger.
-\end{question}
+in a closed category, because application does not exists. (The application in the other law, \lstinline{(\f -> f ())}, is really just $\iota$ as $f : [I,B]$.)
+However, in the setting of a symmetric monoidal closed category, Conor's interchange law can be derived from the simpler closed laws.
+Hence, this perspective has shown us that the applicative functor laws in Haskell are over specified!
 
 \subsection{Relating other categorical definitions of idioms}
 
@@ -313,8 +309,8 @@ The following results link this presentation to the above definition. It seems l
         \begin{tikzcd}
           I & {[A,A]} \\
           & {[JA,JA]}
-          \arrow["{j_A}", from=1-1, to=1-2]
-          \arrow["{j_{JA}}"', from=1-1, to=2-2]
+          \arrow["{\jmath_A}", from=1-1, to=1-2]
+          \arrow["{\jmath_{JA}}"', from=1-1, to=2-2]
           \arrow["{\theta_{A,A}}", from=1-2, to=2-2]
         \end{tikzcd}
         \and
@@ -347,7 +343,7 @@ This result states that idioms are also described by \emph{strong lax closed end
 We next give a result that connects strong and pointed endofunctors in the monoidal setting.
 
 \begin{prop} \label{prop:strong-pointed-monoidal}
-  Let $(\CCat, I, \otimes)$ be a symmetric monoidal category and $(J, \varepsilon, \phi): \CCat \to \CCat$ a lax monoidal endofunctor.
+  Let $(\CCat, I, \otimes, \lambda, \rho, \alpha)$ be a symmetric monoidal category and $(J, \varepsilon, \phi): \CCat \to \CCat$ a lax monoidal endofunctor.
   Then, the following data are equivalent:
   \begin{enumerate}
     \item A monoidal natural transformation $\eta: \id_\CCat \to J$. That is, the following diagrams commute.
@@ -397,7 +393,7 @@ We next give a result that connects strong and pointed endofunctors in the monoi
 
 We now establish the connection between the closed setting and the monoidal setting when the category is symmetric monoidal closed.
 
-\begin{thm} \label{prop:strong-monoidal-closed}
+\begin{thm} \label{prop:idiom-corresp}
   Let $(\CCat, I, \otimes, [{-},{=}])$ be a symmetric monoidal closed category and $J: \CCat \to \CCat$ an endofunctor.
   Then, the following are equivalent:
   \begin{enumerate}
@@ -434,7 +430,7 @@ This formally aligns the commonly stated folklore that an idiom is \emph{just} a
 Any idiom is an enriched idiom.
 
 \begin{prop}
-  Let $\CCat$ be a Cartesian closed category. Given an idiom $(J_0, \unit, \kappa)$ on $\CCat$,
+  Let $\CCat$ be a symmetric monoidal closed category. Given an idiom $(J_0, \unit, \kappa)$ on $\CCat$,
   there is a $\CCat$-enriched functor $J : \CCat \to \CCat$ that has same mapping on objects
   as $J_0$, and its mapping on hom-objects is $J_{A,B} = \kappa_{A,B}: [A,B] \to [JA, JB]$.
 
@@ -442,7 +438,9 @@ Any idiom is an enriched idiom.
 \end{prop}
 
 \begin{proof}
-  For the purpose of this proof, it is easier to consider $J_0$ equivalently as a strong lax monoidal functor by \Cref{prop:strong-pointed-monoidal}. Then, as shown by \cite{kock-strong-functors}, $J$ is automatically a $\CCat$-enriched functor by the definition above. In particular, one can easily check that $J$ and $J_0$ have the same action on morphisms, i.e. for every $f: A \to B$: 
+  For the purpose of this proof, it is easier to consider $J_0$ equivalently as a strong lax monoidal functor by \Cref{prop:idiom-corresp}.
+  Then, as shown by \cite{kock-strong-functors}, $J$ is automatically a $\CCat$-enriched functor by the definition above.
+  In particular, one can easily check that $J$ and $J_0$ have the same action on morphisms, i.e. for every $f: A \to B$:
   \[
   \begin{tikzcd}
     I && {[A,B]} \\
@@ -484,7 +482,7 @@ In the sense that Kleisli categories of monads capture programs with monadic eff
   \end{mathpar}
   and $R$ is defined as
   \begin{mathpar}
-    RA = JA, \and R_{A,B}(f) = \lambda a.W(\mathsf{ev})(\phi_{[A,B], A}(f, a)),
+    RA = JA, \and R_{A,B}(f) = \kappa_{A,B}(f).
   \end{mathpar}
 \end{prop}
 
@@ -514,11 +512,11 @@ where $\tilde\theta_{A,B} : TA \times B \to T(A\times B)$ is the right strength 
 Note, we can define a second lax multiplication by chaining the strengths in the opposite order,
 and these composites are equal if and only if $T$ is commutative~\cite{kock-strong-functors}.
 
-It is easy to define a $\CCat$-enriched functor $F: \Idm{T} \to \Kl(T)$ which is identity on objects and has its action on morphism $F_{A, B}$ defined as the following composition:
+It is easy to define a $\CCat$-enriched functor $F: \Idm{T} \to \Kl(T)$ which is identity on objects and has its action on morphism defined as:
 \[
-  T[A, B] \xrightarrow{} [TA, TB] \xrightarrow{[\eta_A, TB]} [A, TB]
+  F_{A,B} : T[A, B] \xrightarrow{R_{A,B}} [TA, TB] \xrightarrow{[\eta_A, TB]} [A, TB]
 \]
-where the first arrow is exactly the same as $R_{A, B}$ (this corresponds to the \texttt{<*>} operation in the Haskell interface).
+where the first arrow, $R_{A, B}$, corresponds to the \texttt{<*>} operation in the Haskell interface.
 
 \begin{prop}
   In the following diagram, $F \circ L = L'$ and $R' \circ F = R$.
