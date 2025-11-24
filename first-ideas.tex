@@ -622,6 +622,10 @@ We can build the following program:
 \]
 The intuition of this program is that it first generates all \emph{worlds} and enumerates them using $\underline{\omega}$.
 The function $f:\mathbb{N}\to A$ performs some action based on that world. However, the operation $\underline{3}$ kills all worlds above enumeration $3$.
+The result will be a \emph{hom-list} of the worlds that have not been killed:
+\[
+  [f \mapsto f(0), f\mapsto f(1), f \mapsto f(2)]
+\]
 
 \bibliography{refs}
 \bibliographystyle{plainurl}
