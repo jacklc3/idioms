@@ -161,6 +161,7 @@
 \newcommand{\CCat}{\mathcal{C}}
 \newcommand{\DCat}{\mathcal{D}}
 \newcommand{\GCat}{\mathcal{G}}
+\newcommand{\Cat}{\mathsf{Cat}}
 \newcommand{\id}{\mathsf{id}}
 
 \newcommand{\bind}{\mathrel{\scalebox{0.5}[1]{$>\!>=$}}}
@@ -254,20 +255,20 @@ They must satisfy the following laws:
   pure id ** u = u
   ((pure (.) ** u) ** v) ** w = u ** (v ** w)
   pure f ** pure x = pure (f x)
-  u ** pure x = pure (\f -> f x) ** u
+  u ** pure x = pure ($ x) ** u
 \end{lstlisting}
 We can see that the data of an applicative in Haskell is the same as the data of an idiom defined above (where $\varepsilon = \mlstinline{pure ()}$ implicitly).
 Each law corresponds to one of those above (beside the trivial $\varepsilon = \eta_I$) except for the exchange law,
 which when instantiating into Haskell notation gives:
 \begin{lstlisting}
-  u ** pure () = pure (\f -> f ()) ** u
+  u ** pure () = pure ($ ()) ** u
 \end{lstlisting}
 It is not possible to express the interchange law of applicative functors
 \begin{lstlisting}
-  u ** pure x = pure (\f -> f x) ** u
+  u ** pure x = pure ($ x) ** u
 \end{lstlisting}
-in a closed category, because application does not exists. (The application in the other law, \lstinline{(\f -> f ())}, is really just $\iota$ as $f : [I,B]$.)
-However, in the setting of a symmetric monoidal closed category, Conor's interchange law can be derived from the simpler closed laws.
+in a closed category, because application does not exists. (The application in the other law, \lstinline{($ ())}, is really just $\iota$ as $f : [I,B]$.)
+However, in the setting of a symmetric monoidal closed category, the interchange law can be derived from the simpler closed laws.
 Hence, this perspective has shown us that the applicative functor laws in Haskell are over specified!
 
 \subsection{Relating other categorical definitions of idioms}
@@ -461,13 +462,17 @@ The goal of this section is to define a Kleisli-like category for idioms.
 In the sense that Kleisli categories of monads capture programs with monadic effects, we would like the Kleisli-like category to capture programs with idiomatic effects.
 
 \begin{defn}
+  Let $\CCat$ and $\DCat$ be monoidal categories and $(F, \varepsilon, \phi): \CCat \to \DCat$ be a lax monoidal functor. The \emph{change of base 2-functor}
+  $F_\# : \CCat\Cat \to \DCat\Cat$ is given by applying $F$ to the $\CCat$ objects of morphisms.
+\end{defn}
+
+\begin{defn}
   For a Cartesian closed category $\CCat$ considered self-enriched, and an idiom $(J, \unit, \mult)$.
-  We define the category $\Idm J$ as the image of the category $\CCat$ under the change of base along $J$.
-  That is,
+  We define the category $\Idm J = J_\#\CCat$. That is,
   \begin{mathpar}
     \ob {\Idm J} = \ob \CCat,
     \and
-    \Idm J (A, B) = J[A,B].
+    \Idm J [A, B] = J[A,B].
   \end{mathpar}
 \end{defn}
 
@@ -588,8 +593,16 @@ For each operator of our idiom, $\sigma : A$, it may be introduced via the follo
   \inferrule{ }{\cj \bullet {\underline{\sigma}} A}
 \end{mathpar}
 
+\begin{conj}
+  Sound and complete models of this metalanguage are a CCC $\CCat$, a SMCC $\DCat$ and an identity-on-objects SMC functor $F: \CCat \to \DCat$.
+\end{conj}
+
+This is underwhelming because the models do not mention $\Idm J$.
+
 \begin{question}
-  Can we find a syntax that is sound and complete for $\Idm J$? What about $R$? Can we develop this further to accommodate the full ``appjuncion'' like as in CBPV?
+  How can we relate the above models to those that incorporate $\Idm J$?
+  Is there a syntax that is sound and complete for $\Idm J$? What about $R$?
+  Can we develop this further to accommodate the full ``appjuncion'' like as in CBPV?
 \end{question}
 
 \subsection{Example with zip}
