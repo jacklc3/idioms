@@ -1,0 +1,295 @@
+\documentclass{article}
+
+\newcommand{\hide}[1]{}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{datetime}
+\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{mathpartir}
+\usepackage{quiver}
+\usepackage{stmaryrd}
+\usepackage{tikz-cd}
+\usepackage{tikz}
+\usepackage{cleveref}
+
+\usepackage{listings}
+\lstset{
+  backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}; should come as last argument
+%  basicstyle=\footnotesize,        % the size of the fonts that are used for the code
+%  breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
+%  breaklines=true,                 % sets automatic line breaking
+%  captionpos=b,                    % sets the caption-position to bottom
+  commentstyle=\itshape\rmfamily\color{gray},    % comment style
+%  deletekeywords={...},            % if you want to delete keywords from the given language
+%  escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+%  extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+%  firstnumber=1000,                % start line enumeration with line 1000
+%  frame=single,	                   % adds a frame around the code
+  keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+  columns=flexible,
+  keywordstyle= \sffamily,       % keyword style
+  identifierstyle=\rmfamily\itshape,
+  language=haskell,                 % the language of the code
+  basicstyle=\sffamily\upshape,
+%  morekeywords=[2]{knight,bernoulli},            % if you want to add more keywords to the set
+%  keywordstyle=[2]\itshape\bfseries,       % keyword style
+%  morekeywords=[3]{Prob,uniform,bernoulli,normal,beta,exponential},            % if you want to add more keywords to the set
+%  keywordstyle=[3]\color{mygreen},       % keyword style
+%  numbers=left,                    % where to put the line numbers; possible values are (none, left, right)
+%  numbersep=5pt,                   % how far the line numbers are from the code
+%  numberstyle=\tiny\color{mygray}, % the style that is used for the line-numbers
+%  rulecolor=\color{black},         % if not set, the frame colour may be changed on line breaks within not-black text (e.g. comments (green here))
+  showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+  showstringspaces=false,          % underline spaces within strings only
+  showtabs=false,                  % show tabs within strings adding particular underscores
+%  stepnumber=2,                    % the step between two line numbers. If it's 1, each line will be numbered
+  stringstyle=\color{mymauve},     % string literal style
+%  tabsize=2,	                   % sets default tab size to 2 spaces
+%  title=\lstname                   % show the filename of files included with \lstinputlisting; also try caption instead of title
+ literate={->}{$\rightarrow\;$}{2}
+ {<-}{$\leftarrow\;$}{2}
+}
+
+\newcommand{\mlstinline}[1]{\mbox{\lstinline|#1|}}
+
+\newtheorem{thm}{Theorem}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{conj}[thm]{Conjecture}
+\newtheorem{claim}[thm]{Claim}
+
+\theoremstyle{definition}
+\newtheorem{defn}[thm]{Definition}
+\newtheorem{example}[thm]{Example}
+\newtheorem{question}[thm]{Question}
+
+\theoremstyle{remark}
+\newtheorem{remark}[thm]{Remark}
+
+\newcommand{\MCA}{\ensuremath{\mathcal A}}
+\newcommand{\MCB}{\ensuremath{\mathcal B}}
+\newcommand{\MCC}{\ensuremath{\mathcal C}}
+\newcommand{\MCD}{\ensuremath{\mathcal D}}
+\newcommand{\MCE}{\ensuremath{\mathcal E}}
+\newcommand{\MCF}{\ensuremath{\mathcal F}}
+\newcommand{\MCG}{\ensuremath{\mathcal G}}
+\newcommand{\MCH}{\ensuremath{\mathcal H}}
+\newcommand{\MCI}{\ensuremath{\mathcal I}}
+\newcommand{\MCJ}{\ensuremath{\mathcal J}}
+\newcommand{\MCK}{\ensuremath{\mathcal K}}
+\newcommand{\MCL}{\ensuremath{\mathcal L}}
+\newcommand{\MCM}{\ensuremath{\mathcal M}}
+\newcommand{\MCN}{\ensuremath{\mathcal N}}
+\newcommand{\MCO}{\ensuremath{\mathcal O}}
+\newcommand{\MCP}{\ensuremath{\mathcal P}}
+\newcommand{\MCQ}{\ensuremath{\mathcal Q}}
+\newcommand{\MCR}{\ensuremath{\mathcal R}}
+\newcommand{\MCS}{\ensuremath{\mathcal S}}
+\newcommand{\MCT}{\ensuremath{\mathcal T}}
+\newcommand{\MCU}{\ensuremath{\mathcal U}}
+\newcommand{\MCV}{\ensuremath{\mathcal V}}
+\newcommand{\MCW}{\ensuremath{\mathcal W}}
+\newcommand{\MCX}{\ensuremath{\mathcal X}}
+\newcommand{\MCY}{\ensuremath{\mathcal Y}}
+\newcommand{\MCZ}{\ensuremath{\mathcal Z}}
+
+\newcommand{\BA}{\ensuremath{\mathbb A}}
+\newcommand{\BB}{\ensuremath{\mathbb B}}
+\newcommand{\BC}{\ensuremath{\mathbb C}}
+\newcommand{\BD}{\ensuremath{\mathbb D}}
+\newcommand{\BE}{\ensuremath{\mathbb E}}
+\newcommand{\BF}{\ensuremath{\mathbb F}}
+\newcommand{\BG}{\ensuremath{\mathbb G}}
+\newcommand{\BH}{\ensuremath{\mathbb H}}
+\newcommand{\BI}{\ensuremath{\mathbb I}}
+\newcommand{\BJ}{\ensuremath{\mathbb J}}
+\newcommand{\BK}{\ensuremath{\mathbb K}}
+\newcommand{\BL}{\ensuremath{\mathbb L}}
+\newcommand{\BM}{\ensuremath{\mathbb M}}
+\newcommand{\BN}{\ensuremath{\mathbb N}}
+\newcommand{\BO}{\ensuremath{\mathbb O}}
+\newcommand{\BP}{\ensuremath{\mathbb P}}
+\newcommand{\BQ}{\ensuremath{\mathbb Q}}
+\newcommand{\BR}{\ensuremath{\mathbb R}}
+\newcommand{\BS}{\ensuremath{\mathbb S}}
+\newcommand{\BT}{\ensuremath{\mathbb T}}
+\newcommand{\BU}{\ensuremath{\mathbb U}}
+\newcommand{\BV}{\ensuremath{\mathbb V}}
+\newcommand{\BW}{\ensuremath{\mathbb W}}
+\newcommand{\BX}{\ensuremath{\mathbb X}}
+\newcommand{\BY}{\ensuremath{\mathbb Y}}
+\newcommand{\BZ}{\ensuremath{\mathbb Z}}
+
+\ddmmyyyydate
+\renewcommand{\dateseparator}{-}
+
+\makeatletter
+\def\@maketitle{%
+  \newpage
+  \null
+  \vskip 2em%
+  \begin{center}%
+  \let \footnote \thanks
+    {\large \textbf \@title \par}%
+    \vskip 1.5em%
+    {
+      \lineskip .5em%
+      \begin{tabular}[t]{c}%
+        \@author
+      \end{tabular}\par}%
+    \vskip 1em%
+    {Draft of \@date}%
+  \end{center}%
+  \par
+  \vskip 1.5em}
+\makeatother
+
+\newcommand{\todo}[1]{\textcolor{blue}{[TODO: #1]}}
+
+\DeclareMathOperator*{\colim}{colim}
+
+\newcommand{\op}{^{\mathrm{op}}}
+\newcommand{\Kl}{\mathrm{Kl}}
+\newcommand{\Set}{\mathbf{Set}}
+\newcommand{\FinSet}{\mathbf{FinSet}}
+\newcommand{\CCat}{\mathcal{C}}
+\newcommand{\DCat}{\mathcal{D}}
+\newcommand{\GCat}{\mathcal{G}}
+\newcommand{\Cat}{\mathsf{Cat}}
+\newcommand{\id}{\mathsf{id}}
+
+\newcommand{\bind}{\mathrel{\scalebox{0.5}[1]{$>\!>=$}}}
+\newcommand{\ob}[1]{{|#1|}}
+
+\newcommand{\mult}{\phi}
+\newcommand{\unit}{\eta}
+
+\newcommand{\Idm}[1]{\mathsf{Idm}(#1)}
+
+\newcommand{\ipure}{\mathbf{pure}}
+\newcommand{\iapp}{\mathbin{\langle * \rangle}}
+\newcommand{\opnew}{\mathsf{new}}
+\newcommand{\opapply}{\mathsf{apply}}
+\newcommand{\opflip}{\mathsf{flip}}
+\newcommand{\idiomop}{\mathsf{iop}}
+\newcommand{\patop}{\mathbf{op}}
+
+
+\title{Applicatives as PATs: an Initial Idea}
+\author{Theo Wang}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+This note summarises an initial idea formulating applicatives in terms of a PAT, following the previous meeting. 
+
+\section{Motivation}
+
+We start with the free applicative view, where we see a computation $u: J(X)$ to be a list of effects paired with a pure function consuming the return types of those effects:
+\begin{equation}
+    \inferrule{(\Gamma \vdash u_i : J(X_i))_{i=1...k} \and \Gamma \vdash f : \prod_i X_i \to X}{\Gamma \vdash ([u_1...u_k], f): J(X)}
+\end{equation}
+This formulation comes from the `idiomatic brackets' normal form coined by McBride and Patterson \cite{mcbride-applicatives}, and directly follows from the idea of representing an applicative as `the sum for all effect sequences with a map that processes each effects' return value' that @Sean presented last meeting. Say we only allow a certain class of finitary ground effects $e_i: J(n_i)$, we can get 
+\begin{equation}
+  \label{eqn:freeapplicative}
+    \inferrule{(e_i : J(n_i))_{i=1...k} \and \Gamma \vdash f : \prod_i n_i \to X}{\Gamma \vdash ([e_1...e_k], f): J(X)}
+\end{equation}
+
+\begin{question}[Naive]
+  Do we lose expressiveness by only allowing these `ground' effects?
+\end{question}
+
+Now let's proceed to produce an algebraic theory that encodes the data of such an applicative. Recall the case for monads on $\Set$. If $T: $ is a finitary monad on $\Set$, the correspondence between its Kleisli category (direct style) and a Lawvere theory (algebraic style), can be seen through a partial application of the $\bind$ operation. For example, given an effect $$e: 1 \to T(2)$$ we can obtain for any $X$ a $$(e(*)) \bind (-): T(X)^2 \to T(X)$$ which is exactly that operation in algebraic style. 
+
+Using the same idea, given an effect $$e: 1 \to J(2)$$ we could also transform it, this time using $\iapp$, to its natural `algebraic' form: $$e(*) \iapp (-): J(X^2) \to J(X).$$ Thus, to some extent, in the `algebraic theory' corresponding to an applicative, \emph{every effect should be interpreted as an operation as such}. In contrast to an algebraic theory where we only need a carrier object and all its products, we now need a lot of different carrier objects: at least one corresponding to each $J(X^n)$, for each $n$. This motivates using parameterised algebraic theories.
+
+\begin{question}
+  Can we build a single-sorted PAT using only these $J(X^n)$ objects? 
+\end{question}
+
+I did something different because I found it difficult to formulate what should happen when I want to combine two effects together into a single map. For example, in the monad case, given a $T(X)^m \to T(X)$ and a $T(X)^n \to T(X)$ it is easy to construct a $T(X)^{m\times n} \to T(X)$. In the applicative case, we can easily convert a $J(m)$ and a $J(n)$ to a $J(X^{m \times n}) \to J(X)$, but given the same operations in `algebraic form' $J(X^m) \to J(X)$ and $J(X^n) \to J(X)$ we suddenly don't have the right data to convert them. 
+
+My intuition is that an applicative operation $J(n)$ should not correspond to just its `unary' applicative form $J(X^n) \to J(X)$, but rather a natural transformation of the form $$J((X^{(-)})^n)\to J(X^{(-)}).$$ 
+
+This explains why parameterising by these $n$'s would not work, at least in the setting I had in mind. If we did so, we'd interpret $n$-ary applicative operations as natural transformations \[
+n \bullet C \cong C(n+(-)) \to C
+\]
+where we think of $C$, the carrier presheaf, as $C(n) = J(X^n)$. If instead we formulated a multi-sorted theory where the parameter category $P$ contains the free products of theses $n$'s, we'd instead interpret the same $n$-ary applicative operation as a natural transformation
+\[
+[n] \bullet C \cong C([n] \times (-)) \to C
+\]
+where we think of $C([n_i]_i)$ as $J(X^{\prod_i n_i})$. Now we are natural over the right thing. 
+
+
+% This would mean that we need a parameter category $P$ where each object is not a singular $n$, but rather a list of them. Then, the naturality condition that comes from working in the presheaves over $P$ would mean that the interpretation of an applicative operation $J(n)$. 
+
+\section{A multi-sorted PAT for applicatives?}
+
+\subsection{Idea}
+
+% My approach, inspired by the free applicatives view, is based on treating the ground effects themselves (instead of their arity) as sorted resources. That is, for each $n$-ary operation $e: J(n)$, instead of interpreting it as an operation $(0\mid n)$, i.e. of type $$n \bullet C \to C$$ (where $C$ is the carrier presheaf, think of $C(m)$ as $J(X^m)$), we interpret it as an operation $([] \mid [n])$, i.e. of type $$[n] \bullet C \to C$$ where the carrier presheaf $C$ is now multisorted, to be thought of as $C([n_i]_i) = J(X^{\prod_i n_i})$. 
+Let us now formulate my approach in a bit more detail. We essentially treat the applicative effects directly as parameters/resources. We consider a discretely parameterised theory with terms generated as follows:
+
+\begin{mathpar}
+  \inferrule{ }{\Gamma, x: [n_1...n_k], \Gamma' \mid (a_i: n_i)_i \vdash x(a_1...a_k)}
+  \and
+  \inferrule{\mathbf{op}: ([n_1...n_k] \mid [m_1^1...m_{q_1}^1]...[m_1^p ... m_{q_p}^p]) \and \left\{\Gamma \mid \Delta, \ b_1^i: m_1^i...b_{q_i}^i: m_{q_i}^i, \ \Delta' \vdash t_i \right\}_{i=1...p}}{\Gamma \mid \Delta, \ a_1:n_1...a_k : n_k,\ \Delta' \vdash \mathbf{op}(a_1...a_k, (b_1^i...b_{q_i}^i. \ t_i)_{i=1...p})}
+\end{mathpar}
+Note the difference with the scoped effects paper \cite{lindley-scoped-effects}: instead of considering the parameters as akin to a stack, we'd like to consider it as some sort of free non-symmetric monoidal category. Why do we not allow symmetry? Because in applicatives, while the effects are associative, they are not commutative, and the parameter context now records the order in which these effects will be executed at the end, much like the list of effects $[e_i:n_i]_i$ in the free applicative form. 
+
+
+Given an applicative $J$ presented by some finitary operations we can now formulate operations:
+\[
+  \opnew_{\idiomop}: ([] \mid [n])
+\]
+for each operation $\idiomop: n$ of $J$, as well as more things like maybe an operation for 
+\[
+  \opapply_{f: n \to m}: ([n] \mid [m])
+\]
+or even an operation for pure computations 
+\[
+  \ipure_{i: n}: ([] \mid [n])
+\]
+such that everything satisfies certain equations. I haven't yet put any thought as to what equations might be suitable. 
+
+Three remarks. Firstly, we need a discrete, i.e. non-symmetric theory. This is because 
+
+Secondly, we can now easily formulate the case where multiple effects are performed:
+\[
+x: [n, m] \mid \cdot \vdash \opnew_{\idiomop_n}(a. \ \opnew_{\idiomop_m}(b. \ x(a, b)))
+\]
+where $\idiomop_n$ (resp $\idiomop_m$) is an $n$-ary (resp $m$-ary) applicative operation,
+or indeed this can be simplified and formulated as a simple structural map:
+\[
+x: [n, m] \mid a: n, b: m \vdash x(a, b)
+\]
+
+Thirdly, because our rules allows one to perform an effect at an arbitrary point in the parameter context, it means that in particular, we can perform an applicative operation $\idiomop: n$ at \emph{any point} in the program. In other words, the order of operations does not matter; all that matters is the order in which they are laid out in the parameter context. This feels like the `right' thing to do for applicatives.
+
+\subsection{Relation to monads?}
+One potentially cool feature that this formulation could have is its connection to our intitial note and Jack's earlier ideas about dual context calculus, which integrates the Idiom and the Kleisli categories together and has the potential of formalising the applicative do notation. Here, we by construction allow both views to be presented. Indeed, notice how, so far, we have not yet used a context $\Gamma$ with more than one continuation variable; a single continuation variable along with the $\Delta$ context suffice for the applicative view. At the same time, it is not hard to see that the $\Gamma$ context alone allows one to specify non-parameterised algebraic operations! 
+
+Consider for example the finitely supported probability monad $P: \Set \to \Set$, which supports a flip operation $\opflip: 2$. Then it can have two instantiations in the PAT we constructed: the applicative one
+\[
+\opnew_{\opflip}: ([] \mid [2])
+\]
+which can be thought of as a $P(X^2) \to P(X)$, as well as a monadic one:
+\[
+\opflip: ([] \mid [], [])
+\]
+which can be thought of as a $P(X)^2 \to P(X)$. We can even specify how these two operations should relate to each other, and how monadic operations should interact with applicative ones. 
+
+Note: I have not checked whether this formulation makes the interpretation of the operations natural in the `right' way. 
+
+\bibliography{refs}
+\bibliographystyle{plainurl}
+
+\end{document}
