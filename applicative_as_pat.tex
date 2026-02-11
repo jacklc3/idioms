@@ -193,18 +193,22 @@ This note summarises an initial idea formulating applicatives in terms of a PAT,
 
 \section{Motivation}
 
-We start with the free applicative view, where we see a computation $u: J(X)$ to be a list of effects paired with a pure function consuming the return types of those effects:
+We start with the free applicative view \cite{capriotti-free-applicatives}, where we see a computation $u: J(X)$ to be a list of effects paired with a pure function consuming the return types of those effects:
 \begin{equation}
     \inferrule{(\Gamma \vdash u_i : J(X_i))_{i=1...k} \and \Gamma \vdash f : \prod_i X_i \to X}{\Gamma \vdash ([u_1...u_k], f): J(X)}
 \end{equation}
-This formulation comes from the `idiomatic brackets' normal form coined by McBride and Patterson \cite{mcbride-applicatives}, and directly follows from the idea of representing an applicative as `the sum for all effect sequences with a map that processes each effects' return value' that @Sean presented last meeting. Say we only allow a certain class of finitary ground effects $e_i: J(n_i)$, we can get 
+This formulation comes from the `idiomatic brackets' normal form coined by McBride and Patterson \cite{mcbride-applicatives}, and directly follows from the idea of representing an applicative as 
+\begin{quote}
+``The sum for all effect sequences with a map that processes each effect's return value"
+\end{quote}
+that @Sean presented last meeting. Say we only allow a certain class of finitary ground effects $e_i: J(n_i)$, we can get 
 \begin{equation}
   \label{eqn:freeapplicative}
     \inferrule{(e_i : J(n_i))_{i=1...k} \and \Gamma \vdash f : \prod_i n_i \to X}{\Gamma \vdash ([e_1...e_k], f): J(X)}
 \end{equation}
 
 \begin{question}[Naive]
-  Do we lose expressiveness by only allowing these `ground' effects?
+  Do we lose expressiveness by only allowing these `ground' effects? In fact do we even still get an applicative? 
 \end{question}
 
 Now let's proceed to produce an algebraic theory that encodes the data of such an applicative. Recall the case for monads on $\Set$. If $T: $ is a finitary monad on $\Set$, the correspondence between its Kleisli category (direct style) and a Lawvere theory (algebraic style), can be seen through a partial application of the $\bind$ operation. For example, given an effect $$e: 1 \to T(2)$$ we can obtain for any $X$ a $$(e(*)) \bind (-): T(X)^2 \to T(X)$$ which is exactly that operation in algebraic style. 
@@ -217,12 +221,12 @@ Using the same idea, given an effect $$e: 1 \to J(2)$$ we could also transform i
 
 I did something different because I found it difficult to formulate what should happen when I want to combine two effects together into a single map. For example, in the monad case, given a $T(X)^m \to T(X)$ and a $T(X)^n \to T(X)$ it is easy to construct a $T(X)^{m\times n} \to T(X)$. In the applicative case, we can easily convert a $J(m)$ and a $J(n)$ to a $J(X^{m \times n}) \to J(X)$, but given the same operations in `algebraic form' $J(X^m) \to J(X)$ and $J(X^n) \to J(X)$ we suddenly don't have the right data to convert them. 
 
-My intuition is that an applicative operation $J(n)$ should not correspond to just its `unary' applicative form $J(X^n) \to J(X)$, but rather a natural transformation of the form $$J((X^{(-)})^n)\to J(X^{(-)}).$$ 
+My intuition is that an applicative operation $e: J(n)$ should not correspond to just $J(X^n) \to J(X)$, but rather a transformation $$e_m: J((X^{m})^n)\to J(X^{m})$$ natural in $m$, where we allow this extra $m$ to be added in a natural way.
 
 This explains why parameterising by these $n$'s would not work, at least in the setting I had in mind. If we did so, we'd interpret $n$-ary applicative operations as natural transformations \[
 n \bullet C \cong C(n+(-)) \to C
 \]
-where we think of $C$, the carrier presheaf, as $C(n) = J(X^n)$. If instead we formulated a multi-sorted theory where the parameter category $P$ contains the free products of theses $n$'s, we'd instead interpret the same $n$-ary applicative operation as a natural transformation
+where we think of $C$, the carrier presheaf, as $C(n) = J(X^n)$. If instead we formulated a multi-sorted theory where the parameter category $P$ contains the free products of these $n$'s, we'd instead interpret the same $n$-ary applicative operation as a natural transformation
 \[
 [n] \bullet C \cong C([n] \times (-)) \to C
 \]
@@ -236,21 +240,21 @@ where we think of $C([n_i]_i)$ as $J(X^{\prod_i n_i})$. Now we are natural over 
 \subsection{Idea}
 
 % My approach, inspired by the free applicatives view, is based on treating the ground effects themselves (instead of their arity) as sorted resources. That is, for each $n$-ary operation $e: J(n)$, instead of interpreting it as an operation $(0\mid n)$, i.e. of type $$n \bullet C \to C$$ (where $C$ is the carrier presheaf, think of $C(m)$ as $J(X^m)$), we interpret it as an operation $([] \mid [n])$, i.e. of type $$[n] \bullet C \to C$$ where the carrier presheaf $C$ is now multisorted, to be thought of as $C([n_i]_i) = J(X^{\prod_i n_i})$. 
-Let us now formulate my approach in a bit more detail. We essentially treat the applicative effects directly as parameters/resources. We consider a discretely parameterised theory with terms generated as follows:
+Let us now formulate my approach in a bit more detail. We essentially treat an applicative effect $J(n)$ directly as a parameter/resource of sort $n$. We consider a discretely parameterised theory with terms generated as follows:
 
 \begin{mathpar}
   \inferrule{ }{\Gamma, x: [n_1...n_k], \Gamma' \mid (a_i: n_i)_i \vdash x(a_1...a_k)}
   \and
   \inferrule{\mathbf{op}: ([n_1...n_k] \mid [m_1^1...m_{q_1}^1]...[m_1^p ... m_{q_p}^p]) \and \left\{\Gamma \mid \Delta, \ b_1^i: m_1^i...b_{q_i}^i: m_{q_i}^i, \ \Delta' \vdash t_i \right\}_{i=1...p}}{\Gamma \mid \Delta, \ a_1:n_1...a_k : n_k,\ \Delta' \vdash \mathbf{op}(a_1...a_k, (b_1^i...b_{q_i}^i. \ t_i)_{i=1...p})}
 \end{mathpar}
-Note the difference with the scoped effects paper \cite{lindley-scoped-effects}: instead of considering the parameters as akin to a stack, we'd like to consider it as some sort of free non-symmetric monoidal category. Why do we not allow symmetry? Because in applicatives, while the effects are associative, they are not commutative, and the parameter context now records the order in which these effects will be executed at the end, much like the list of effects $[e_i:n_i]_i$ in the free applicative form. 
+Note the difference with the scoped effects paper \cite{lindley-scoped-effects, matache-scoped-effects}: instead of considering the parameters as akin to a stack, we'd like to consider it as some sort of free non-symmetric monoidal category. Why do we not allow symmetry? Because in applicatives, while the effects are associative, they are not commutative, and the parameter context now records the order in which these effects will be executed at the end, much like the list of effects $[e_i:n_i]_i$ in the free applicative form. 
 
 
-Given an applicative $J$ presented by some finitary operations we can now formulate operations:
+Given an (finitely presented???) applicative $J$, for each of its operations $\idiomop: n$ we can now formulate operations:
 \[
   \opnew_{\idiomop}: ([] \mid [n])
 \]
-for each operation $\idiomop: n$ of $J$, as well as more things like maybe an operation for 
+as well as more things like maybe an operation for 
 \[
   \opapply_{f: n \to m}: ([n] \mid [m])
 \]
@@ -260,9 +264,11 @@ or even an operation for pure computations
 \]
 such that everything satisfies certain equations. I haven't yet put any thought as to what equations might be suitable. 
 
-Three remarks. Firstly, we need a discrete, i.e. non-symmetric theory. This is because 
+\begin{question}
+  Does this formulation make sense wrt equations between operations in a free applicative? 
+\end{question}
 
-Secondly, we can now easily formulate the case where multiple effects are performed:
+Two remarks. Firstly, we can now easily formulate the case where multiple effects are performed:
 \[
 x: [n, m] \mid \cdot \vdash \opnew_{\idiomop_n}(a. \ \opnew_{\idiomop_m}(b. \ x(a, b)))
 \]
@@ -272,10 +278,10 @@ or indeed this can be simplified and formulated as a simple structural map:
 x: [n, m] \mid a: n, b: m \vdash x(a, b)
 \]
 
-Thirdly, because our rules allows one to perform an effect at an arbitrary point in the parameter context, it means that in particular, we can perform an applicative operation $\idiomop: n$ at \emph{any point} in the program. In other words, the order of operations does not matter; all that matters is the order in which they are laid out in the parameter context. This feels like the `right' thing to do for applicatives.
+Secondly, because our rules allows one to perform an effect at an arbitrary point in the parameter context, it means that in particular, we can perform an applicative operation $\idiomop: n$ at \emph{any point} in the program. In other words, the order of operations does not matter; all that matters is the order in which they are laid out in the parameter context. This feels like the `right' thing to do for applicatives.
 
 \subsection{Relation to monads?}
-One potentially cool feature that this formulation could have is its connection to our intitial note and Jack's earlier ideas about dual context calculus, which integrates the Idiom and the Kleisli categories together and has the potential of formalising the applicative do notation. Here, we by construction allow both views to be presented. Indeed, notice how, so far, we have not yet used a context $\Gamma$ with more than one continuation variable; a single continuation variable along with the $\Delta$ context suffice for the applicative view. At the same time, it is not hard to see that the $\Gamma$ context alone allows one to specify non-parameterised algebraic operations! 
+One potentially cool feature that this formulation could have is its connection to our intitial note and @Jack's ideas about a dual context calculus, which integrates the Idiom and the Kleisli categories together and has the potential of formalising the applicative do notation. Here, we by construction allow both views to be presented. Indeed, notice how, so far, we have not yet used a context $\Gamma$ with more than one continuation variable; a single continuation variable along with the $\Delta$ context suffice for the applicative view. At the same time, it is not hard to see that the $\Gamma$ context alone allows one to specify non-parameterised algebraic operations! 
 
 Consider for example the finitely supported probability monad $P: \Set \to \Set$, which supports a flip operation $\opflip: 2$. Then it can have two instantiations in the PAT we constructed: the applicative one
 \[
